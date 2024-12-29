@@ -35,7 +35,7 @@ SYNOPSIS
     }
     GEOJSON
 
-    spurt "map.html", $map.generate;
+    spurt "map.html", $map.generate-page;
 
 DESCRIPTION
 ===========
@@ -113,7 +113,7 @@ method
 
 generate-page
 
-    spurt "map.html", $map.generate;
+    spurt "map.html", $map.generate-page;
 
 Generate a complete HTML page for the map (including html, head, body, etc.). Returns a string.
 

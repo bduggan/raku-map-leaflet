@@ -111,7 +111,7 @@ $map.add-geojson(q:to/GEOJSON/);
 }
 GEOJSON
 
-spurt "map.html", $map.generate;
+spurt "map.html", $map.generate-page;
 
 =end code
 
@@ -183,7 +183,7 @@ Add a GeoJSON layer.  The argument is a string containing GeoJSON.
 
 =method generate-page
 
-    spurt "map.html", $map.generate;
+    spurt "map.html", $map.generate-page;
 
 Generate a complete HTML page for the map (including html, head, body, etc.).  Returns a string.
 
