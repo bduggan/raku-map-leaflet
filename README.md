@@ -55,6 +55,10 @@ new
 
 Constructor. Options (attributes of the object) are:
 
+#### title
+
+The title of the HTML page. Defaults to 'Map'.
+
 #### center
 
 A hash with `lat` and `lon` keys.

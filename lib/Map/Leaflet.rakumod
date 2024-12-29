@@ -13,6 +13,7 @@ has $.extra-css = q:to/CSS/;
    }
 CSS
 
+has $.title = 'Map';
 has $.leaflet-version = '1.9.4';
 has $.leaflet-providers-version = '1.13.0';
 
@@ -26,12 +27,8 @@ has $.leaflet-providers-js-url = 'https://unpkg.com/leaflet-providers@' ~ $!leaf
 has @.markers;
 has @.geojson-layers;
 
-method add-marker(%coords, $popup?) {
-    @!markers.push: {
-        lat => %coords<lat>,
-        lon => %coords<lon>,
-        popup => $popup
-    };
+method add-marker(%coords where { $_<lat>:exists and $_<lon>:exists } , $popup?) {
+    @!markers.push: %( |%coords, :$popup );
 }
 
 method add-geojson($geojson) {
@@ -52,7 +49,7 @@ method generate-page {
     qq:to/END/;
     <html>
     <head>
-        <title>Leaflet Map</title>
+        <title>{ $.title }</title>
         <link rel="stylesheet" href="{$!leaflet-css-url}" />
         <script src="{$!leaflet-js-url}"></script>
         <script src="{$!leaflet-providers-js-url}"></script>
@@ -129,6 +126,10 @@ Generate HTML that renders a map, using the excellent leaflet.js library.
     );
 
 Constructor.  Options (attributes of the object) are:
+
+=head4 title
+
+The title of the HTML page.  Defaults to 'Map'.
 
 =head4 center
 
