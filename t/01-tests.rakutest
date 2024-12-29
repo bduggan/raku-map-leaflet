@@ -1,0 +1,36 @@
+use Test;
+use Map::Leaflet;
+
+plan 11;
+
+my $default-map = Map::Leaflet.new;
+is $default-map.center<lat>, 0, 'Default latitude is 0';
+is $default-map.center<lon>, 0, 'Default longitude is 0';
+is $default-map.zoom, 13, 'Default zoom is 13';
+is $default-map.markers.elems, 0, 'No markers by default';
+
+my $custom-map = Map::Leaflet.new(
+    center => { :lat(40.7128), :lon(-74.0060) },
+    zoom => 15,
+    width => 1024,
+    height => 768
+);
+is $custom-map.center<lat>, 40.7128, 'Custom latitude set correctly';
+is $custom-map.center<lon>, -74.0060, 'Custom longitude set correctly';
+is $custom-map.zoom, 15, 'Custom zoom set correctly';
+
+$custom-map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "Test Marker");
+is $custom-map.markers.elems, 1, 'One marker added successfully';
+
+my $html = $custom-map.generate-page;
+like $html, /'<html>'/, 'Generated content has html tag';
+like $html, /'Test Marker'/, 'Marker content included';
+
+my $custom-tile-map = Map::Leaflet.new(
+    tile-url => 'https://example.com/tiles/{z}/{x}/{y}.png',
+    tile-provider => 'CustomTiler'
+);
+my $custom-html = $custom-tile-map.generate-page;
+like $custom-html, /'CustomTiler'/, 'Custom tile provider included';
+
+done-testing;

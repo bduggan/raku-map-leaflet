@@ -1,0 +1,134 @@
+[![Actions Status](https://github.com/bduggan/raku-leaflet/actions/workflows/linux.yml/badge.svg)](https://github.com/bduggan/raku-leaflet/actions/workflows/linux.yml)
+[![Actions Status](https://github.com/bduggan/raku-leaflet/actions/workflows/macos.yml/badge.svg)](https://github.com/bduggan/raku-leaflet/actions/workflows/macos.yml)
+
+NAME
+====
+
+Map::Leaflet - Generate maps using leaflet.js
+
+SYNOPSIS
+========
+
+    use Map::Leaflet;
+
+    my $map = Map::Leaflet.new(
+        center => { :lat(40.7128), :lon(-74.0060) },
+        zoom => 13
+    );
+
+    $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
+    $map.add-marker({ :lat(40.7589), :lon(-73.9851) }, "Empire State Building");
+    $map.add-marker({ :lat(40.7267), :lon(-73.9815) }, "Tompkins Square Park");
+
+    $map.add-geojson(q:to/GEOJSON/);
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-74.0060, 40.7128],
+          [-73.9851, 40.7589],
+          [-73.9815, 40.7267],
+          [-74.0060, 40.7128]
+        ]
+      }
+    }
+    GEOJSON
+
+    spurt "map.html", $map.generate;
+
+DESCRIPTION
+===========
+
+Generate HTML that renders a map, using the excellent leaflet.js library.
+
+METHODS
+=======
+
+new
+---
+
+    my $map = Map::Leaflet.new(
+        center => { :lat(40.7128), :lon(-74.0060) },
+        zoom => 13
+    );
+
+Constructor. Options (attributes of the object) are:
+
+over
+====
+
+
+
+  * center
+
+A hash with `lat` and `lon` keys.
+
+  * zoom
+
+The zoom level (integer).
+
+  * width, height
+
+The height and width of the map. Defaults to 95vw and 95vh, respectively.
+
+  * extra-css
+
+Extra CSS to include in the HTML. The default adds a border and centers the map.
+
+  * tile-provider
+
+The tile provider to use. Defaults to 'CartoDB.Positron'. For a complete list of providers, see [https://leaflet-extras.github.io/leaflet-providers/preview/](https://leaflet-extras.github.io/leaflet-providers/preview/).
+
+Here are a few of the providers listed: `CartoDB.Positron`, `OpenStreetMap.Mapnik`, `Esri.WorldstreetMap`
+
+  * leaflet-version, leaflet-providers-version
+
+The version of leaflet.js and leaflet-providers.js to use. Defaults to 1.9.4 and 1.13.0, respectively.
+
+back
+====
+
+
+
+add-marker
+----------
+
+    $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
+
+Add a marker. The first argument is a hash with `lat` and `lon` keys, and the second argument is an optional popup text.
+
+add-geojson
+-----------
+
+    $map.add-geojson(q:to/GEOJSON/);
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-74.0060, 40.7128],
+          [-73.9851, 40.7589],
+          [-73.9815, 40.7267],
+          [-74.0060, 40.7128]
+        ]
+      }
+    }
+    GEOJSON
+
+Add a GeoJSON layer. The argument is a string containing GeoJSON.
+
+method
+======
+
+generate-page
+
+    spurt "map.html", $map.generate;
+
+Generate a complete HTML page for the map (including html, head, body, etc.). Returns a string.
+
+AUTHOR
+======
+
+Brian Duggan
+

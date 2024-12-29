@@ -1,0 +1,24 @@
+{
+  "name" : "Map::Leaflet",
+  "authors" : [
+    "Brian Duggan"
+  ],
+  "provides" : {
+    "My::Module" : "lib/Map/Leaflet.rakumod",
+    "my-exe" : "bin/my-exe"
+  },
+  "build-depends" : [ ],
+  "depends" : [
+    "JSON::Fast"
+  ],
+  "description" : "Generate Leaflet maps",
+  "tags" : [
+    "geo"
+  ],
+  "license" : "MIT",
+  "raku" : "6.*",
+  "version" : "0.0.1",
+  "auth" : "zef:bduggan",
+  "source-url" : "git://github.com/bduggan/raku-map-leaflet.git"
+}
+
