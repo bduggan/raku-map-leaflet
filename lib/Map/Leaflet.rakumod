@@ -130,35 +130,31 @@ Generate HTML that renders a map, using the excellent leaflet.js library.
 
 Constructor.  Options (attributes of the object) are:
 
-=over
-
-=item center
+=head3 center
 
 A hash with C<lat> and C<lon> keys.
 
-=item zoom
+=head3 zoom
 
 The zoom level (integer).
 
-=item width, height
+=head3 width, height
 
 The height and width of the map.  Defaults to 95vw and 95vh, respectively.
 
-=item extra-css
+=head3 extra-css
 
 Extra CSS to include in the HTML.  The default adds a border and centers the map.
 
-=item tile-provider
+=head3 tile-provider
 
 The tile provider to use.  Defaults to 'CartoDB.Positron'.  For a complete list of providers, see L<https://leaflet-extras.github.io/leaflet-providers/preview/>.
 
 Here are a few of the providers listed:  C<CartoDB.Positron>, C<OpenStreetMap.Mapnik>, C<Esri.WorldstreetMap>
 
-=item leaflet-version, leaflet-providers-version
+=head3 leaflet-version, leaflet-providers-version
 
 The version of leaflet.js and leaflet-providers.js to use.  Defaults to 1.9.4 and 1.13.0, respectively.
-
-=back
 
 =head2 add-marker
 
