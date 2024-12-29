@@ -55,29 +55,29 @@ new
 
 Constructor. Options (attributes of the object) are:
 
-### center
+#### center
 
 A hash with `lat` and `lon` keys.
 
-### zoom
+#### zoom
 
 The zoom level (integer).
 
-### width, height
+#### width, height
 
 The height and width of the map. Defaults to 95vw and 95vh, respectively.
 
-### extra-css
+#### extra-css
 
 Extra CSS to include in the HTML. The default adds a border and centers the map.
 
-### tile-provider
+#### tile-provider
 
 The tile provider to use. Defaults to 'CartoDB.Positron'. For a complete list of providers, see [https://leaflet-extras.github.io/leaflet-providers/preview/](https://leaflet-extras.github.io/leaflet-providers/preview/).
 
 Here are a few of the providers listed: `CartoDB.Positron`, `OpenStreetMap.Mapnik`, `Esri.WorldstreetMap`
 
-### leaflet-version, leaflet-providers-version
+#### leaflet-version, leaflet-providers-version
 
 The version of leaflet.js and leaflet-providers.js to use. Defaults to 1.9.4 and 1.13.0, respectively.
 
