@@ -181,7 +181,7 @@ Add a marker.  The first argument is a hash with C<lat> and C<lon> keys, and the
 
 Add a GeoJSON layer.  The argument is a string containing GeoJSON.
 
-=method generate-page
+=head2 generate-page
 
     spurt "map.html", $map.generate-page;
 

@@ -108,10 +108,8 @@ add-geojson
 
 Add a GeoJSON layer. The argument is a string containing GeoJSON.
 
-method
-======
-
 generate-page
+-------------
 
     spurt "map.html", $map.generate-page;
 
