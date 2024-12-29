@@ -117,6 +117,11 @@ generate-page
 
 Generate a complete HTML page for the map (including html, head, body, etc.). Returns a string.
 
+SEE ALSO
+========
+
+[https://leafletjs.com/](https://leafletjs.com/)
+
 AUTHOR
 ======
 

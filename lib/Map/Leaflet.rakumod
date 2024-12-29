@@ -187,6 +187,10 @@ Add a GeoJSON layer.  The argument is a string containing GeoJSON.
 
 Generate a complete HTML page for the map (including html, head, body, etc.).  Returns a string.
 
+=head1 SEE ALSO
+
+L<https://leafletjs.com/>
+
 =head1 AUTHOR
 
 Brian Duggan
