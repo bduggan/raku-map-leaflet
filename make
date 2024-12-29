@@ -1,7 +1,7 @@
 #!/usr/bin/env raku
 
 constant $readme-src = "lib/Map/Leaflet.rakumod";
-constant $github-repo = 'bduggan/raku-leaflet';
+constant $github-repo = 'bduggan/raku-map-leaflet';
 
 if %*ENV<VERBOSE> {
   &shell.wrap: -> |c { say c.raku; callsame; }
