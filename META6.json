@@ -4,8 +4,7 @@
     "Brian Duggan"
   ],
   "provides" : {
-    "My::Module" : "lib/Map/Leaflet.rakumod",
-    "my-exe" : "bin/my-exe"
+    "My::Module" : "lib/Map/Leaflet.rakumod"
   },
   "build-depends" : [ ],
   "depends" : [
