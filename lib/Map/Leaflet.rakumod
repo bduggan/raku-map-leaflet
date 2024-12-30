@@ -1,7 +1,7 @@
 unit class Map::Leaflet:ver<0.0.1>;
 use JSON::Fast;
 
-has %.center = :lat(0), :lon(0);
+has %.center; # :lat(0), :lon(0);
 has $.zoom = 13;
 has $.width = '95vw';
 has $.height = '95vh';
@@ -37,16 +37,30 @@ method add-geojson($geojson) {
 
 method generate-page {
     my $markers-js = @!markers.map(-> $m {
-        qq[L.marker([{$m<lat>}, {$m<lon>}])] ~
-        ($m<popup> ?? qq[.bindPopup('{$m<popup>}')] !! '') ~
-        '.addTo(map);'
+        qq:to/JS/;
+        bounds.extend([{$m<lat>}, {$m<lon>}]);
+        all_layers.push(
+          L.marker([{$m<lat>}, {$m<lon>}], \{title: "{$m<popup>}"})
+            .addTo(map)
+            .bindPopup("{$m<popup>}")
+        );
+        JS
     }).join("\n") // '';
 
     my $geojson-js = @!geojson-layers.map(-> $l {
-        qq[L.geoJSON($l).addTo(map);]
+      # qq[L.geoJSON($l).addTo(map);]
+      qq:to/JS/;
+      L.geoJSON($l).addTo(map);
+      bounds.extend(L.geoJSON($l).getBounds());
+      JS
     }).join("\n") // '';
 
+    my $start-pos = %!center<lat>.defined ??
+    "map.setView([{%!center<lat>}, {%!center<lon>}], {$!zoom});" !!
+    "map.fitBounds(bounds);";
+
     qq:to/END/;
+    <!DOCTYPE html>
     <html>
     <head>
         <title>{ $.title }</title>
@@ -61,11 +75,14 @@ method generate-page {
     <body>
         <div id="map"></div>
         <script>
-            var map = L.map('map').setView([{%!center<lat>}, {%!center<lon>}], {$!zoom});
+            var map = L.map('map');
             L.tileLayer.provider('{$!tile-provider}').addTo(map);
             L.control.scale().addTo(map);
+            let bounds = L.latLngBounds();
+            let all_layers = [];
             $markers-js
             $geojson-js
+            $start-pos
         </script>
     </body>
     </html>
@@ -84,11 +101,7 @@ Map::Leaflet - Generate maps using leaflet.js
 
 use Map::Leaflet;
 
-my $map = Map::Leaflet.new(
-    center => { :lat(40.7128), :lon(-74.0060) },
-    zoom => 13
-);
-
+my $map = Map::Leaflet.new;
 $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
 $map.add-marker({ :lat(40.7589), :lon(-73.9851) }, "Empire State Building");
 $map.add-marker({ :lat(40.7267), :lon(-73.9815) }, "Tompkins Square Park");
@@ -122,12 +135,16 @@ Generate HTML that renders a map, using the excellent leaflet.js library.
 
 =head2 new
 
+    my $map = Map::Leaflet.new;
     my $map = Map::Leaflet.new(
         center => { :lat(40.7128), :lon(-74.0060) },
         zoom => 13
     );
 
-Constructor.  Options (attributes of the object) are:
+Constructor.  If no center is specified, then it will fit
+the bounds of all markers and geojson layers.
+
+Other options are:
 
 =head4 title
 

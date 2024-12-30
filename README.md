@@ -11,11 +11,7 @@ SYNOPSIS
 
     use Map::Leaflet;
 
-    my $map = Map::Leaflet.new(
-        center => { :lat(40.7128), :lon(-74.0060) },
-        zoom => 13
-    );
-
+    my $map = Map::Leaflet.new;
     $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
     $map.add-marker({ :lat(40.7589), :lon(-73.9851) }, "Empire State Building");
     $map.add-marker({ :lat(40.7267), :lon(-73.9815) }, "Tompkins Square Park");
@@ -50,12 +46,15 @@ METHODS
 new
 ---
 
+    my $map = Map::Leaflet.new;
     my $map = Map::Leaflet.new(
         center => { :lat(40.7128), :lon(-74.0060) },
         zoom => 13
     );
 
-Constructor. Options (attributes of the object) are:
+Constructor. If no center is specified, then it will fit the bounds of all markers and geojson layers.
+
+Other options are:
 
 #### title
 
