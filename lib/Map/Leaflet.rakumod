@@ -190,6 +190,7 @@ Add a marker.  The first argument is a hash with C<lat> and C<lon> keys, and the
 
 =head2 add-geojson
 
+    $map.add-geojson($geojson, $style);
     $map.add-geojson(q:to/GEOJSON/);
     {
       "type": "Feature",
@@ -204,8 +205,22 @@ Add a marker.  The first argument is a hash with C<lat> and C<lon> keys, and the
       }
     }
     GEOJSON
+    $map.add-geojson(
+      %( :type<Feature>, :geometry(
+        %( :type<LineString>, :coordinates(
+          [
+            [-74.0060, 40.7128],
+            [-73.9851, 40.7589],
+            [-73.9815, 40.7267],
+            [-74.0060, 40.7128]
+          ]
+        ))
+      )),
+      style => { :color<red> }
+    );
 
-Add a GeoJSON layer.  The argument is a string containing GeoJSON.
+Add a GeoJSON layer. C<$geojson> can be a string or a hash.  C<$style> is optional and can also
+be a string or a hash.
 
 =head2 generate-page
 
