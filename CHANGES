@@ -1,2 +1,7 @@
+0.0.2 2024-12-30
+  - optional style
+  - fit to bounds, add doctype
+  - fix optional popups
+
 0.0.1 2024-12-29
    Initial release
