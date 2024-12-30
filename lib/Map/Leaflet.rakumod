@@ -112,6 +112,8 @@ spurt "map.html", $map.generate-page;
 
 =end code
 
+![output](https://github.com/user-attachments/assets/fd0b1a5f-ec57-4007-b5dd-a5daa10c85f7)
+
 =head1 DESCRIPTION
 
 Generate HTML that renders a map, using the excellent leaflet.js library.
