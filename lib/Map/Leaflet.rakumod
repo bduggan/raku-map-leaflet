@@ -31,8 +31,8 @@ method add-marker(%coords where { $_<lat>:exists and $_<lon>:exists } , $popup?)
     @!markers.push: %( |%coords, :$popup );
 }
 
-method add-geojson($geojson) {
-    @!geojson-layers.push: $geojson;
+method add-geojson($geojson, :$style) {
+    @!geojson-layers.push: %( :$geojson, :$style );
 }
 
 method generate-page {
@@ -47,13 +47,19 @@ method generate-page {
         JS
     }).join("\n") // '';
 
-    my $geojson-js = @!geojson-layers.map(-> $l {
-      # qq[L.geoJSON($l).addTo(map);]
-      qq:to/JS/;
-      L.geoJSON($l).addTo(map);
-      bounds.extend(L.geoJSON($l).getBounds());
+    my $geojson-js;
+    for @!geojson-layers -> $l {
+      my $geojson = $l<geojson> ~~ Str ?? $l<geojson> !! to-json($l<geojson>);
+      my $style =    !$l<style> ?? ''
+                  !! $l<style> ~~ Str ?? $l<style>
+                  !! to-json($l<style>);
+      $geojson-js ~= qq:to/JS/;
+      all_layers.push(
+        L.geoJSON($geojson, $style).addTo(map)
+      );
+      bounds.extend(all_layers[all_layers.length - 1].getBounds());
       JS
-    }).join("\n") // '';
+    }
 
     my $start-pos = %!center<lat>.defined ??
     "map.setView([{%!center<lat>}, {%!center<lon>}], {$!zoom});" !!
