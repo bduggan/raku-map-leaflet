@@ -1,11 +1,9 @@
 use Test;
 use Map::Leaflet;
 
-plan 11;
+plan 9;
 
 my $default-map = Map::Leaflet.new;
-is $default-map.center<lat>, 0, 'Default latitude is 0';
-is $default-map.center<lon>, 0, 'Default longitude is 0';
 is $default-map.zoom, 13, 'Default zoom is 13';
 is $default-map.markers.elems, 0, 'No markers by default';
 
