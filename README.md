@@ -37,6 +37,8 @@ SYNOPSIS
 
     spurt "map.html", $map.generate-page;
 
+![output](https://github.com/user-attachments/assets/fd0b1a5f-ec57-4007-b5dd-a5daa10c85f7)
+
 DESCRIPTION
 ===========
 
