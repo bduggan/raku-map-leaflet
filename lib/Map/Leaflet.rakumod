@@ -36,16 +36,19 @@ method add-geojson($geojson, :$style) {
 }
 
 method generate-page {
-    my $markers-js = @!markers.map(-> $m {
-        qq:to/JS/;
-        bounds.extend([{$m<lat>}, {$m<lon>}]);
-        all_layers.push(
-          L.marker([{$m<lat>}, {$m<lon>}], \{title: "{$m<popup>}"})
-            .addTo(map)
-            .bindPopup("{$m<popup>}")
-        );
-        JS
-    }).join("\n") // '';
+    my $markers-js = "";
+    for @!markers -> $m {
+      my $popup = "";
+      my ($lat, $lon) = $m<lat lon>;
+      with $m<popup> {
+        $popup = ".bindPopup('$_')";
+      }
+      $markers-js ~= qq:to/JS/;
+      bounds.extend([$lat, $lon]);
+      all_layers.push( L.marker([$lat, $lon]).addTo(map){ $popup }
+      );
+      JS
+    }
 
     my $geojson-js = "";
     for @!geojson-layers -> $l {
