@@ -47,7 +47,7 @@ method generate-page {
         JS
     }).join("\n") // '';
 
-    my $geojson-js;
+    my $geojson-js = "";
     for @!geojson-layers -> $l {
       my $geojson = $l<geojson> ~~ Str ?? $l<geojson> !! to-json($l<geojson>);
       my $style =    !$l<style> ?? ''
