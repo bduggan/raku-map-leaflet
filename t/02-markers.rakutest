@@ -1,0 +1,22 @@
+#!raku
+
+use Test;
+use Map::Leaflet;
+
+my $map = Map::Leaflet.new;
+
+my $div-icon = $map.create-div-icon(html => '<b>New York City</b>');
+my $icon = $map.create-icon(iconUrl => 'https://leafletjs.com/examples/custom-icons/leaf-green.png');
+ok $div-icon, 'create-div-icon';
+ok $icon, 'create-icon';
+
+ok $map.create-marker(latlng => [ 40.7128, -74.0060 ], options => %( icon => $icon )), 'create-marker';
+ok $map.create-marker(latlng => [ 40.7589, -73.9851 ], options => %( title => 'Empire State Building', popup-text => 'The Empire State Building' )), 'create-marker';
+
+like $div-icon.render, / 'let div_icon' .* '= L.divIcon' /, 'div-icon.render';
+like $icon.render, / 'let icon' .* '= L.icon' /, 'icon.render';
+like $icon.render, / 'leafletjs.com' /, 'icon.render';
+
+like $map.generate-page, / '<!DOCTYPE html>' /, 'generate-page';
+
+done-testing;

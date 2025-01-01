@@ -40,6 +40,10 @@ DESCRIPTION
 
 Generate HTML that renders a map, using the excellent leaflet.js library.
 
+The `Map::Leaflet` class represents a map which can be rendered as HTML. Use a map object to create objects which are analagous to their javascript counterparts, and then render the entire page to generate the javascript.
+
+There are default values for many of the leaflet objects, in an attempt to make common cases work more easily out of the box.
+
 METHODS
 =======
 
@@ -52,9 +56,9 @@ new
         zoom => 13
     );
 
-Constructor. If no center is specified, then it will fit the bounds of all markers and geojson layers.
+Constructor. If no center is specified, then bounds are computed, and the starting view will have a zoom level and extents that fit all of the layers that have been added.
 
-Other options are:
+Other options to the constructor are:
 
 #### title
 
@@ -74,7 +78,7 @@ The height and width of the map. Defaults to 95vw and 95vh, respectively.
 
 #### extra-css
 
-Extra CSS to include in the HTML. The default adds a border and centers the map.
+Extra CSS to include in the HTML. The default adds a border, centers the map, and provides a class for div-icons.
 
 #### tile-provider
 
@@ -91,7 +95,37 @@ add-marker
 
     $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
 
-Add a marker. The first argument is a hash with `lat` and `lon` keys, and the second argument is an optional popup text.
+Add a marker. The first argument is a hash with `lat` and `lon` keys, and the second argument is an optional popup text. See `create-marker` below for a more flexible way to create markers.
+
+create-div-icon
+---------------
+
+    my $div-icon = $map.create-div-icon(html => '<b>New York City</b>');
+    my $div-icon = $map.create-div-icon: html => '<b>Paris</b>', iconSize => 'auto', className => 'mlraku-div-icon';
+
+Create a divIcon. Accepts all of the leaflet.js options. See [https://leafletjs.com/reference.html#divicon](https://leafletjs.com/reference.html#divicon). Defaults to auto-sizing, a yellow background, and a black border, and a class of 'mlraku-div-icon'.
+
+Also accepts a `name` option, which is used to name the icon in the javascript (defaults to an auto-generated name).
+
+Returns a `Map::Leaflet::DivIcon` object.
+
+create-icon
+-----------
+
+    my $icon = $map.create-icon(iconUrl => 'https://leafletjs.com/examples/custom-icons/leaf-green.png');
+    my $icon = $map.create-icon: iconUrl => 'https://leafletjs.com/examples/custom-icons/leaf-green.png', iconSize => '[38, 95]';
+
+Create an icon. Accepts all of the leaflet.js options. See [https://leafletjs.com/reference.html#icon](https://leafletjs.com/reference.html#icon). Note that the iconSize, iconAnchor, popupAnchor, and tooltipAnchor are all `PointStr` objects, which can be either a string of the form "[x, y]" or the string "auto".
+
+create-marker
+-------------
+
+    $map.create-marker(latlng => [ $lat, $lon ], options => %( icon => $icon ));
+    $map.create-marker: latlng => [ $lat, $lon ], options => %( title => 'New York City', popup-text => 'The Big Apple' );
+
+Create a marker. Accepts all of the leaflet.js options. See [https://leafletjs.com/reference.html#marker](https://leafletjs.com/reference.html#marker). Also accepts popup-text as an option to generate a popup that is bound to the marker.
+
+Defaults to False values for autoPan and autoPanFocus.
 
 add-geojson
 -----------
