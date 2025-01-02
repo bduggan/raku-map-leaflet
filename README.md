@@ -40,7 +40,7 @@ DESCRIPTION
 
 Generate HTML that renders a map, using the excellent leaflet.js library.
 
-The `Map::Leaflet` class represents a map which can be rendered as HTML. Use a map object to create objects which are analagous to their javascript counterparts, and then render the entire page to generate the javascript.
+The `Map::Leaflet` class represents a map which can be rendered as HTML. Use a map object to create objects which are analogous to their javascript counterparts, and then render the entire page to generate the javascript.
 
 There are default values for many of the leaflet objects, in an attempt to make common cases work more easily out of the box.
 

@@ -304,7 +304,7 @@ spurt "map.html", $map.generate-page;
 Generate HTML that renders a map, using the excellent leaflet.js library.
 
 The C<Map::Leaflet> class represents a map which can be rendered as HTML.
-Use a map object to create objects which are analagous to their javascript
+Use a map object to create objects which are analogous to their javascript
 counterparts, and then render the entire page to generate the javascript.
 
 There are default values for many of the leaflet objects, in an attempt to
