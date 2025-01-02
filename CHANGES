@@ -1,3 +1,7 @@
+0.0.4 2025-01-02
+    doc typo
+    change generate-page to render
+
 0.0.3 2025-01-02
     - icons, div icons, defaults, style, classes
     - cave example
