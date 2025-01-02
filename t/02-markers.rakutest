@@ -17,6 +17,6 @@ like $div-icon.render, / 'let div_icon' .* '= L.divIcon' /, 'div-icon.render';
 like $icon.render, / 'let icon' .* '= L.icon' /, 'icon.render';
 like $icon.render, / 'leafletjs.com' /, 'icon.render';
 
-like $map.generate-page, / '<!DOCTYPE html>' /, 'generate-page';
+like $map.render, / '<!DOCTYPE html>' /, 'render';
 
 done-testing;

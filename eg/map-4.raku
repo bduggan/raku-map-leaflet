@@ -6,6 +6,6 @@ my $map = Map::Leaflet.new;
 # Add markers
 $map.add-marker({ :lat(40.7267), :lon(-73.9815) });
 
-spurt "map.html", $map.generate-page;
+spurt "map.html", $map.render;
 say "wrote map.html";
 

@@ -20,7 +20,7 @@ is $custom-map.zoom, 15, 'Custom zoom set correctly';
 $custom-map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "Test Marker");
 is $custom-map.markers.elems, 1, 'One marker added successfully';
 
-my $html = $custom-map.generate-page;
+my $html = $custom-map.render;
 like $html, /'<html>'/, 'Generated content has html tag';
 like $html, /'Test Marker'/, 'Marker content included';
 
@@ -28,7 +28,7 @@ my $custom-tile-map = Map::Leaflet.new(
     tile-url => 'https://example.com/tiles/{z}/{x}/{y}.png',
     tile-provider => 'CustomTiler'
 );
-my $custom-html = $custom-tile-map.generate-page;
+my $custom-html = $custom-tile-map.render;
 like $custom-html, /'CustomTiler'/, 'Custom tile provider included';
 
 done-testing;

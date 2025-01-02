@@ -24,6 +24,6 @@ $map.add-geojson(q:to/GEOJSON/);
 }
 GEOJSON
 
-spurt "map.html", $map.generate-page;
+spurt "map.html", $map.render;
 say "wrote map.html";
 

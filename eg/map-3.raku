@@ -18,6 +18,6 @@ $map.add-geojson(
   style => { :color<red> }
 );
 
-spurt "map.html", $map.generate-page;
+spurt "map.html", $map.render;
 say "wrote map.html";
 

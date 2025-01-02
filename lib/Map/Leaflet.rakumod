@@ -200,7 +200,7 @@ method add-marker(
   self.create-marker(:latlng(%coords<lat>, %coords<lon>), options => %( :$popup-text ) );
 }
 
-method generate-page {
+method render {
     my $icons-js = @!icons.map: { .render.indent(6) };
 
     my $markers-js = "";
@@ -293,7 +293,7 @@ $map.add-geojson(q:to/GEOJSON/);
 }
 GEOJSON
 
-spurt "map.html", $map.generate-page;
+spurt "map.html", $map.render;
 
 =end code
 
@@ -429,9 +429,9 @@ Defaults to False values for autoPan and autoPanFocus.
 Add a GeoJSON layer. C<$geojson> can be a string or a hash.  C<$style> is optional and can also
 be a string or a hash.
 
-=head2 generate-page
+=head2 render
 
-    spurt "map.html", $map.generate-page;
+    spurt "map.html", $map.render;
 
 Generate a complete HTML page for the map (including html, head, body, etc.).  Returns a string.
 

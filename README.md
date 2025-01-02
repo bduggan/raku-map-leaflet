@@ -31,7 +31,7 @@ SYNOPSIS
     }
     GEOJSON
 
-    spurt "map.html", $map.generate-page;
+    spurt "map.html", $map.render;
 
 ![output](https://github.com/user-attachments/assets/fd0b1a5f-ec57-4007-b5dd-a5daa10c85f7)
 
@@ -161,10 +161,10 @@ add-geojson
 
 Add a GeoJSON layer. `$geojson` can be a string or a hash. `$style` is optional and can also be a string or a hash.
 
-generate-page
--------------
+render
+------
 
-    spurt "map.html", $map.generate-page;
+    spurt "map.html", $map.render;
 
 Generate a complete HTML page for the map (including html, head, body, etc.). Returns a string.
 

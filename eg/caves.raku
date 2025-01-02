@@ -32,7 +32,7 @@ for $data<elements>.list -> %e {
 }
 
 
-spurt 'caves.html', $map.generate-page;
+spurt 'caves.html', $map.render;
 
 # shell "firefox ./caves.html";
 
