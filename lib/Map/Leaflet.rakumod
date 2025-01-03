@@ -1,141 +1,9 @@
 unit class Map::Leaflet:ver<0.0.1>;
+
 use JSON::Fast;
-
-subset PointStr of Str where { $_ eq 'auto' or /:s ^ '[' \d+ ',' \d+ ']' $/ };
-
-my role LeafObject {
-  method construct-options(Set :$exclude) {
-    my %values;
-    for self.^attributes.list -> $attr {
-      my $value = $attr.get_value(self);
-      next unless defined($value);
-      # remove sigil
-      my $key = $attr.name.subst( / <-[a..zA..Z0..9-]>+ /, '', :g );
-      next if $key eq 'name';
-      next if $exclude && $key (elem) $exclude;
-      %values{ $key } = $value;
-    }
-    return %values;
-  }
-
-  method construct-option-string(Set :$exclude) {
-    my %values = self.construct-options(:$exclude);
-    return option-string(%values);
-  }
-
-  method Str { $.name }
-}
-
-my class Icon does LeafObject {
-  my $index = 0;
-  has $.name = 'icon_' ~ ($index++);
-
-  has $.iconUrl;
-  has $.iconRetinaUrl;
-  has PointStr $.iconSize;
-  has PointStr $.iconAnchor;
-  has PointStr $.popupAnchor;
-  has PointStr $.tooltipAnchor;
-  has $.shadowUrl;
-  has $.shadowRetinaUrl;
-  has PointStr $.shadowSize;
-  has PointStr $.shadowAnchor;
-  has $.className;
-  has Bool $.crossOrigin;
-
-  method render {
-    my $opts-str = self.construct-option-string;
-    return Q:s:to/JS/;
-      let $.name = L.icon($opts-str)
-    JS
-  }
-}
-
-my class DivIcon is Icon {
-  my $index = 0;
-  has $.name = 'div_icon_' ~ ($index++);
-  has $.html;
-  has PointStr $.bgPos;
-  has PointStr $.iconSize = 'auto';
-  has $.className = 'mlraku-div-icon';
-  
-  method render {
-    my $opts-str = self.construct-option-string;
-    return Q:s:to/JS/;
-      let $.name = L.divIcon($opts-str)
-    JS
-  }
-}
-
-my class Layer {
-  has $.attribution;
-}
-
-my class InteractiveLayer is Layer {
-  has Bool $.interactive;
-}
-
-my class Marker is InteractiveLayer does LeafObject {
-  my $index = 0;
-  has $.name = 'marker_' ~ ($index++);
-  has $.popup-text;
-  has Numeric @.latlng;
-
-  has Icon $.icon;
-  has Bool $.keyboard;
-  has Str $.title;
-  has Str $.alt;
-  has $.zIndexOffset;
-  has Rat $.opacity;
-  has Bool $.riseOnHover;
-  has $.pane;
-  has $.shadowPane;
-
-  has Bool $.bubblingMouseEvents;
-  has Bool $.autoPanOnFocus = False;
-  has Bool $.draggable;
-  has Bool $.autoPan = False;
-  has PointStr $.autoPanPanning;
-  has Int $.autoPanSpeed;
-
-  method render-latlng {
-    return '[' ~ @!latlng.join(', ') ~ ']';
-  }
-
-  method render {
-    my $opts-str = self.construct-option-string(exclude => set <latlng popup-text> );
-    my $latlng = self.render-latlng;
-    my $popup-js = "";
-    if $!popup-text.defined {
-      $popup-js = qq:to/JS/.trim;
-        .bindPopup('{ escape-val($!popup-text) }')
-      JS
-    }
-    return Q:s:to/JS/;
-      let $.name = L.marker($latlng, $opts-str)$popup-js;
-      JS
-  }
-}
-
-sub escape-val(Str $val) {
-  $val.subst(:g,  / "'" /, "\\'").subst(:g, "\n", "\\n");
-}
-
-
-sub quote-value($value) {
-  given $value {
-    when PointStr { $value eq 'auto' ?? "'auto'" !! $value }
-    when Str { "'" ~ escape-val($value) ~ "'" }
-    when Bool { $value ?? 'true' !! 'false' }
-    default { $value.Str }
-  }
-}
-
-sub option-string(%options) {
-  '{' ~
-  %options.map({ .key ~ ': ' ~ quote-value(.value) }).join(', ')
-  ~ '}';
-}
+use Map::Leaflet::Icon;
+use Map::Leaflet::Marker;
+use Map::Leaflet::Utils;
 
 has %.center; # :lat(0), :lon(0);
 has $.zoom = 13;
@@ -176,24 +44,28 @@ method add-geojson($geojson where Str|Hash, :$style) {
 }
 
 method create-div-icon(*%options) {
-  my $new = DivIcon.new(|%options);
+  my $new = Map::Leaflet::DivIcon.new(|%options);
   @!icons.push: $new;
   $new;
 }
 
 method create-icon(*%options) {
-  my $new = Icon.new(|%options);
+  my $new = Map::Leaflet::Icon.new(|%options);
   @!icons.push: $new;
   $new;
 }
 
 method create-marker(:@latlng, :%options) {
-  my $new = Marker.new(:@latlng, |%options);
+  my $new = Map::Leaflet::Marker.new(:@latlng, |%options);
   @!markers.push: $new;
   $new;
 }
 
-method add-marker(
+multi method add-marker(Numeric $lat, Numeric $lon, $popup-text?) {
+  self.create-marker(:latlng($lat, $lon), options => %( :$popup-text ) );
+}
+
+multi method add-marker(
   %coords where { $_<lat>:exists and $_<lon>:exists },
   $popup-text?
 ) {
@@ -360,9 +232,11 @@ The version of leaflet.js and leaflet-providers.js to use.  Defaults to 1.9.4 an
 =head2 add-marker
 
     $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
+    $map.add-marker( 40.7128, -74.0060, "New York City");
 
 Add a marker.  The first argument is a hash with C<lat> and C<lon> keys, and the second argument
-is an optional popup text.  See C<create-marker> below for a more flexible way to create markers.
+is an optional popup text.  Or the first two arguments can be numeric for the lat + lon.
+See C<create-marker> below for a more flexible way to create markers.
 
 =head2 create-div-icon
 
