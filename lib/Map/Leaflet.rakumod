@@ -171,7 +171,7 @@ has @.markers;
 has @.geojson-layers;
 has Icon @.icons;
 
-method add-geojson($geojson, :$style) {
+method add-geojson($geojson where Str|Hash, :$style) {
     @!geojson-layers.push: %( :$geojson, :$style );
 }
 
