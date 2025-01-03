@@ -1,11 +1,13 @@
 unit class Map::Leaflet:ver<0.0.1>;
 
 use JSON::Fast;
+use Map::Leaflet::Path;
 use Map::Leaflet::Icon;
 use Map::Leaflet::Marker;
 use Map::Leaflet::Utils;
 
-has %.center; # :lat(0), :lon(0);
+has Bool $.fit-bounds = True;
+has %.center = %( :lat(0), :lon(0) );
 has $.zoom = 13;
 has $.width = '95vw';
 has $.height = '95vh';
@@ -14,6 +16,8 @@ has $.extra-css = q:to/CSS/;
       border: 1px solid #000;
       margin-left: auto;
       margin-right: auto;
+      height: 95vh;
+      width: 95vw;
    }
    .mlraku-div-icon {
       background-color: yellow;
@@ -38,6 +42,22 @@ has $.leaflet-providers-js-url = 'https://unpkg.com/leaflet-providers@' ~ $!leaf
 has @.markers;
 has @.geojson-layers;
 has Icon @.icons;
+has @.layers;
+
+method TWEAK {
+  die "invalid center" unless %!center<lat>:exists and %!center<lon>:exists;
+}
+
+method add-circle(*%opts is copy) {
+  my $center = %opts<center>:delete or die "center is required";
+  my $new = Map::Leaflet::Circle.new(|%opts, latlng => @$center);
+  @!layers.push: $new;
+  $new;
+}
+
+method add-layer($layer) {
+  @!layers.push: $layer;
+}
 
 method add-geojson($geojson where Str|Hash, :$style) {
     @!geojson-layers.push: %( :$geojson, :$style );
@@ -86,21 +106,28 @@ method render {
 
     my $geojson-js = "";
     for @!geojson-layers -> $l {
+      my $name = 'geojson_layer_' ~ (++$);
       my $geojson = $l<geojson> ~~ Str ?? $l<geojson> !! to-json($l<geojson>);
       my $style =    !$l<style> ?? ''
                   !! $l<style> ~~ Str ?? $l<style>
                   !! to-json($l<style>);
       $geojson-js ~= qq:to/JS/;
-      all_layers.push(
-        L.geoJSON($geojson, $style).addTo(map)
-      );
-      bounds.extend(all_layers[all_layers.length - 1].getBounds());
+      let $name =  L.geoJSON($geojson, $style).addTo(map)
+      bounds.extend({ $name }.getBounds());
       JS
     }
 
-    my $start-pos = %!center<lat>.defined ??
-    "map.setView([{%!center<lat>}, {%!center<lon>}], {$!zoom});" !!
-    "map.fitBounds(bounds);";
+    my $layers-js = "";
+    for @!layers -> $l {
+      $layers-js ~= qq:to/JS/.indent(6);
+      { $l.render }
+      { $l.name }.addTo(map);
+      bounds.extend({ $l.name }.getBounds());
+      JS
+    }
+
+    my $start-pos = $!fit-bounds ?? "map.fitBounds(bounds);"
+    !! "map.setView([{%!center<lat>}, {%!center<lon>}], {$!zoom});";
 
     qq:to/END/;
     <!DOCTYPE html>
@@ -111,18 +138,17 @@ method render {
         <script src="{$!leaflet-js-url}"></script>
         <script src="{$!leaflet-providers-js-url}"></script>
         <style>
-            #map \{ height: {$!height}; width: {$!width}; \}
             $!extra-css
         </style>
     </head>
     <body>
         <div id="map"></div>
         <script>
-            var map = L.map('map');
+            var map = L.map('map', \{ center: [ { %!center<lat> }, { %!center<lon> } ], zoom: { $!zoom } });
             L.tileLayer.provider('{$.tile-provider}').addTo(map);
             L.control.scale().addTo(map);
             let bounds = L.latLngBounds();
-            let all_layers = [];
+$layers-js
 $icons-js
 $markers-js
 $geojson-js
