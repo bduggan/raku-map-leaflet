@@ -13,6 +13,8 @@ sub quote-value($value) is export {
     when Str { "'" ~ escape-val($value) ~ "'" }
     when Bool { $value ?? 'true' !! 'false' }
     when Hash { to-json($value, :!pretty) }
+    when Numeric { $value }
+    when .^name ~~ /Leaflet/ { $value.Str }
     default {
       warn "Unknown value type: { $value.^name }";
       $value.Str
