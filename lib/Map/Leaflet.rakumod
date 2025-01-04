@@ -48,8 +48,12 @@ method TWEAK {
   die "invalid center" unless %!center<lat>:exists and %!center<lon>:exists;
 }
 
-method add-circle(*%opts is copy) {
+multi method add-circle(Numeric $lat, Numeric $lon, Numeric $radius, %opts) {
+  self.add-circle( center => [$lat, $lon], radius => $radius, |%opts );
+}
+multi method add-circle(*%opts is copy) {
   my $center = %opts<center>:delete or die "center is required";
+  die "missing radius" unless %opts<radius>:exists;
   my $new = Map::Leaflet::Circle.new(|%opts, latlng => @$center);
   @!layers.push: $new;
   $new;

@@ -34,7 +34,8 @@ class Map::Leaflet::Path is Map::Leaflet::InteractiveLayer is Map::Leaflet::Laye
 
 class Map::Leaflet::Circle is Map::Leaflet::Path is export {
   has $.name = 'circle_' ~ $i++;
-  has Numeric @.latlng; # radius is in the options
+  has Numeric @.latlng;
+  has Numeric $.radius;
   method render {
     my $opts-str = self.construct-option-string(exclude => set <latlng>);
     my $latlng = '[' ~ @.latlng.join(',') ~ ']';
