@@ -12,4 +12,4 @@ my $circle = $map.add-circle(
 );
 
 spurt 'circle.html', $map.render;
-
+say "wrote circle.html";
