@@ -1,10 +1,10 @@
-unit class Map::Leaflet:ver<0.0.1>;
-
 use JSON::Fast;
 use Map::Leaflet::Path;
 use Map::Leaflet::Icon;
 use Map::Leaflet::Marker;
 use Map::Leaflet::Utils;
+
+unit class Map::Leaflet;
 
 has Bool $.fit-bounds = True;
 has %.center = %( :lat(0), :lon(0) );
@@ -40,8 +40,7 @@ has $.leaflet-js-url = 'https://unpkg.com/leaflet@' ~ $!leaflet-version ~ '/dist
 has $.leaflet-providers-js-url = 'https://unpkg.com/leaflet-providers@' ~ $!leaflet-providers-version ~ '/leaflet-providers.js';
 
 has @.markers;
-has @.geojson-layers;
-has Icon @.icons;
+has Map::Leaflet::Icon @.icons;
 has @.layers;
 
 method TWEAK {
@@ -63,13 +62,23 @@ method add-layer($layer) {
   @!layers.push: $layer;
 }
 
-method add-geojson($geojson where Str|Hash, :$style) {
-    @!geojson-layers.push: %( :$geojson, :$style );
-}
+
 
 method create-div-icon(*%options) {
   my $new = Map::Leaflet::DivIcon.new(|%options);
   @!icons.push: $new;
+  $new;
+}
+
+method create-geojson-layer(*%options) {
+  my $new = Map::Leaflet::GeoJSON.new(|%options);
+  @!layers.push: $new;
+  $new;
+}
+
+method add-geojson($geojson where Str|Hash, :$style) {
+  my $new = Map::Leaflet::GeoJSON.new(geojson => $geojson, style => $style);
+  @!layers.push: $new;
   $new;
 }
 
@@ -108,19 +117,6 @@ method render {
       JS
     }
 
-    my $geojson-js = "";
-    for @!geojson-layers -> $l {
-      my $name = 'geojson_layer_' ~ (++$);
-      my $geojson = $l<geojson> ~~ Str ?? $l<geojson> !! to-json($l<geojson>);
-      my $style =    !$l<style> ?? ''
-                  !! $l<style> ~~ Str ?? $l<style>
-                  !! to-json($l<style>);
-      $geojson-js ~= qq:to/JS/;
-      let $name =  L.geoJSON($geojson, $style).addTo(map)
-      bounds.extend({ $name }.getBounds());
-      JS
-    }
-
     my $layers-js = "";
     for @!layers -> $l {
       $layers-js ~= qq:to/JS/.indent(6);
@@ -155,7 +151,6 @@ method render {
 $layers-js
 $icons-js
 $markers-js
-$geojson-js
 $start-pos
         </script>
     </body>

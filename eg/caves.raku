@@ -31,8 +31,8 @@ for $data<elements>.list -> %e {
        );
 }
 
-
 spurt 'caves.html', $map.render;
+note "wrote caves.html";
 
 # shell "firefox ./caves.html";
 

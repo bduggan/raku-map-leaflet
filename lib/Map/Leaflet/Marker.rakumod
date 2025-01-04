@@ -1,6 +1,6 @@
 use Map::Leaflet::Utils;
 use Map::Leaflet::Icon;
-use Map::Leaflet::InteractiveLayer;
+use Map::Leaflet::Layer;
 
 class Map::Leaflet::Marker is Map::Leaflet::InteractiveLayer does LeafObject {
   my $index = 0;

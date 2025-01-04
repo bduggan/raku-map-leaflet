@@ -1,12 +1,11 @@
 #!raku
 
-use Map::Leaflet::InteractiveLayer;
-use Map::Leaflet::Layer;
 use Map::Leaflet::Utils;
+use Map::Leaflet::Layer;
 
 my $i = 0;
 
-class Map::Leaflet::Path is Map::Leaflet::InteractiveLayer is Map::Leaflet::Layer is export {
+class Map::Leaflet::Path is Map::Leaflet::InteractiveLayer is export {
 
   also does LeafObject;
   has $.name = 'path_' ~ $i++;

@@ -1,4 +1,5 @@
 unit module Map::Leaflet::Utils;
+use JSON::Fast;
 
 subset PointStr of Str is export where { $_ eq 'auto' or /:s ^ '[' \d+ ',' \d+ ']' $/ };
 
@@ -11,7 +12,11 @@ sub quote-value($value) is export {
     when PointStr { $value eq 'auto' ?? "'auto'" !! $value }
     when Str { "'" ~ escape-val($value) ~ "'" }
     when Bool { $value ?? 'true' !! 'false' }
-    default { $value.Str }
+    when Hash { to-json($value, :!pretty) }
+    default {
+      warn "Unknown value type: { $value.^name }";
+      $value.Str
+    }
   }
 }
 
