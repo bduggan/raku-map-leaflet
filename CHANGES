@@ -1,6 +1,10 @@
+0.0.5 2025-01-04
+  - new classes for layers, icons, divicons
+  - paths, circles
+
 0.0.4 2025-01-02
-    doc typo
-    change generate-page to render
+  - doc typo
+  - change generate-page to render
 
 0.0.3 2025-01-02
     - icons, div icons, defaults, style, classes
