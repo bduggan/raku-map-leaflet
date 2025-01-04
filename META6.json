@@ -4,7 +4,15 @@
     "Brian Duggan"
   ],
   "provides" : {
-    "Map::Leaflet" : "lib/Map/Leaflet.rakumod"
+    "Map::Leaflet" : "lib/Map/Leaflet.rakumod",
+    "Map::Leaflet::Icon" : "lib/Map/Leaflet/Icon.rakumod",
+    "Map::Leaflet::DivIcon" : "lib/Map/Leaflet/Icon.rakumod",
+    "Map::Leaflet::Layer" : "lib/Map/Leaflet/Layer.rakumod",
+    "Map::Leaflet::InteractiveLayer" : "lib/Map/Leaflet/Layer.rakumod",
+    "Map::Leaflet::Marker" : "lib/Map/Leaflet/Marker.rakumod",
+    "Map::Leaflet::Path" : "lib/Map/Leaflet/Path.rakumod",
+    "Map::Leaflet::Circle" : "lib/Map/Leaflet/Path.rakumod",
+    "Map::Leaflet::Utils" : "lib/Map/Leaflet/Utils.rakumod"
   },
   "build-depends" : [ ],
   "depends" : [
