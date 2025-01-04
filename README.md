@@ -170,6 +170,21 @@ add-geojson
 
 Add a GeoJSON layer. `$geojson` can be a string or a hash. `$style` is optional and can also be a string or a hash.
 
+add-circle, create-circle
+-------------------------
+
+    my $circle = $map.create-circle(
+        center => [40.7128, -74.0060],
+        radius => 500, # meters
+        color => 'red',
+        fillColor => 'red',
+        fillOpacity => 0.5,
+    );
+
+    $map.add-circle( 40.7128, -74.0060, 500, { color => 'red' } );
+
+Create a circle. Accepts all of the leaflet.js options. See [https://leafletjs.com/reference.html#circle](https://leafletjs.com/reference.html#circle). Returns a new `Map::Leaflet::Circle`.
+
 render
 ------
 

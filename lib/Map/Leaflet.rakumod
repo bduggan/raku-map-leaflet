@@ -51,9 +51,9 @@ method TWEAK {
 }
 
 multi method add-circle(Numeric $lat, Numeric $lon, Numeric $radius, %opts) {
-  self.add-circle( center => [$lat, $lon], radius => $radius, |%opts );
+  self.create-circle( center => [$lat, $lon], radius => $radius, |%opts );
 }
-multi method add-circle(*%opts is copy) {
+multi method create-circle(*%opts is copy) {
   my $center = %opts<center>:delete or die "center is required";
   die "missing radius" unless %opts<radius>:exists;
   my $new = Map::Leaflet::Circle.new(|%opts, latlng => @$center);
@@ -346,6 +346,21 @@ Returns a new C<Map::Leaflet::Marker>.
 
 Add a GeoJSON layer. C<$geojson> can be a string or a hash.  C<$style> is optional and can also
 be a string or a hash.
+
+=head2 add-circle, create-circle
+
+  my $circle = $map.create-circle(
+      center => [40.7128, -74.0060],
+      radius => 500, # meters
+      color => 'red',
+      fillColor => 'red',
+      fillOpacity => 0.5,
+  );
+
+  $map.add-circle( 40.7128, -74.0060, 500, { color => 'red' } );
+
+Create a circle.  Accepts all of the leaflet.js options.  See L<https://leafletjs.com/reference.html#circle>.
+Returns a new C<Map::Leaflet::Circle>.
 
 =head2 render
 
