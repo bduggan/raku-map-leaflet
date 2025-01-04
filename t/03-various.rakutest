@@ -1,0 +1,149 @@
+use Test;
+use Map::Leaflet;
+
+# Reduce the plan to match actual test count
+plan 7;
+
+# Constructor tests
+subtest 'Basic constructor tests' => {
+    plan 4;
+    lives-ok { Map::Leaflet.new }, 'Can create map with default parameters';
+    lives-ok { Map::Leaflet.new(center => { :lat(40.7128), :lon(-74.0060) }) }, 'Can create map with center';
+    throws-like 
+        { Map::Leaflet.new(center => { :lat(40.7128) }) },
+        Exception,
+        message => /'invalid center'/,
+        'Dies with invalid center (missing lon)';
+    my $map = Map::Leaflet.new;
+    isa-ok $map, Map::Leaflet, 'Constructor returns correct type';
+}
+
+# Marker tests
+subtest 'Marker creation and addition' => {
+    plan 8;
+    my $map = Map::Leaflet.new;
+    
+    lives-ok { $map.add-marker(40.7128, -74.0060) }, 'Can add marker with lat/lon';
+    lives-ok { $map.add-marker(40.7128, -74.0060, "Test popup") }, 'Can add marker with popup';
+    lives-ok { $map.add-marker({ :lat(40.7128), :lon(-74.0060) }) }, 'Can add marker with coord hash';
+    
+    my $marker = $map.create-marker(
+        latlng => [40.7128, -74.0060],
+        options => %( title => 'Test', popup-text => 'Test popup' )
+    );
+    ok $marker, 'create-marker returns a value';
+    ok $map.markers.elems > 0, 'Marker was added to map';
+    
+    # Test marker rendering
+    my $rendered = $map.render;
+    ok $rendered ~~ /'40.7128'/, 'Rendered output contains latitude';
+    ok $rendered ~~ /'Test popup'/, 'Rendered output contains popup text';
+    ok $rendered ~~ /'L.marker'/, 'Rendered output contains marker creation';
+}
+
+# Icon tests
+subtest 'Icon creation' => {
+    plan 5;
+    my $map = Map::Leaflet.new;
+    
+    my $icon = $map.create-icon(
+        iconUrl => 'test-icon.png',
+        iconSize => '[32, 32]'
+    );
+    ok $icon, 'Can create basic icon';
+    ok $map.icons.elems > 0, 'Icon was added to map';
+    
+    my $div-icon = $map.create-div-icon(
+        html => '<b>Test</b>',
+        className => 'test-class'
+    );
+    ok $div-icon, 'Can create div icon';
+    ok $map.icons.elems > 1, 'Div icon was added to map';
+    
+    my $rendered = $map.render;
+    ok $rendered ~~ /'L.divIcon'/, 'Rendered output contains div icon creation';
+}
+
+# GeoJSON tests
+subtest 'GeoJSON handling' => {
+    plan 4;
+    my $map = Map::Leaflet.new;
+    
+    my $geojson = q:to/GEOJSON/;
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-74.0060, 40.7128],
+          [-73.9851, 40.7589]
+        ]
+      }
+    }
+    GEOJSON
+    
+    lives-ok { $map.add-geojson($geojson) }, 'Can add GeoJSON as string';
+    lives-ok { $map.add-geojson($geojson, style => { color => 'red' }) }, 'Can add GeoJSON with style';
+    
+    my $layer = $map.create-geojson-layer(geojson => $geojson);
+    ok $layer, 'Can create GeoJSON layer';
+    ok $map.layers.elems > 0, 'Layer was added to map';
+}
+
+# Circle tests
+subtest 'Circle creation' => {
+    plan 4;
+    my $map = Map::Leaflet.new;
+    
+    # Fixed: Pass options hash for circle creation
+    lives-ok { $map.add-circle(:center([40.7128, -74.0060]), :radius(1000)) }, 'Can add circle with lat/lon/radius';
+    lives-ok { $map.add-circle(center => [40.7128, -74.0060], radius => 1000) }, 'Can add circle with named params';
+    
+    throws-like 
+        { $map.add-circle(center => [40.7128, -74.0060]) },
+        Exception,
+        message => /'missing radius'/,
+        'Dies when radius is missing';
+        
+    my $rendered = $map.render;
+    ok $rendered ~~ /'L.circle'/, 'Rendered output contains circle creation';
+}
+
+# HTML rendering tests
+subtest 'HTML rendering' => {
+    plan 7;
+    my $map = Map::Leaflet.new(
+        title => 'Test Map',
+        center => { :lat(40.7128), :lon(-74.0060) },
+        zoom => 13
+    );
+    
+    my $html = $map.render;
+    ok $html ~~ /'<!DOCTYPE html>'/, 'Contains DOCTYPE';
+    ok $html ~~ /'<title>Test Map</title>'/, 'Contains correct title';
+    ok $html ~~ /'leaflet.js'/, 'Includes Leaflet JS';
+    ok $html ~~ /'leaflet.css'/, 'Includes Leaflet CSS';
+    ok $html ~~ /'<div id="map">'/, 'Contains map div';
+    ok $html ~~ /'L.map'/, 'Initializes Leaflet map';
+    ok $html ~~ /'CartoDB.Positron'/, 'Uses default tile provider';
+}
+
+# Map configuration tests
+subtest 'Map configuration' => {
+    plan 4;
+    my $map = Map::Leaflet.new(
+        width => '80vw',
+        height => '80vh',
+        tile-provider => 'OpenStreetMap.Mapnik',
+        extra-css => '#map { border: 2px solid red; }'
+    );
+    
+    my $html = $map.render;
+    # Fixed: Check for width/height in CSS section
+    ok $html ~~ /'width: 80vw'/, 'Custom width applied';
+    ok $html ~~ /'height: 80vh'/, 'Custom height applied';
+    ok $html ~~ /'OpenStreetMap.Mapnik'/, 'Custom tile provider applied';
+    ok $html ~~ /'border: 2px solid red'/, 'Custom CSS applied';
+}
+
+done-testing;

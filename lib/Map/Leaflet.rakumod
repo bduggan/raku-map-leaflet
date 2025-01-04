@@ -11,14 +11,17 @@ has %.center = %( :lat(0), :lon(0) );
 has $.zoom = 13;
 has $.width = '95vw';
 has $.height = '95vh';
+has $.border = '1px solid #000';
+method map-css {
+  qq:to/CSS/;
+      #map \{
+        width: $!width;
+        height: $!height;
+        border: $!border;
+      }
+  CSS
+}
 has $.extra-css = q:to/CSS/;
-    #map {
-      border: 1px solid #000;
-      margin-left: auto;
-      margin-right: auto;
-      height: 95vh;
-      width: 95vw;
-   }
    .mlraku-div-icon {
       background-color: yellow;
       border: 1px solid black;
@@ -138,6 +141,7 @@ method render {
         <script src="{$!leaflet-js-url}"></script>
         <script src="{$!leaflet-providers-js-url}"></script>
         <style>
+            { self.map-css }
             $!extra-css
         </style>
     </head>
