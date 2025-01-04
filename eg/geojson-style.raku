@@ -32,6 +32,22 @@ my $layer = $map.create-geojson-layer(
   style => { :color<blue> }
 );
 
+my $geo = Map::Leaflet::GeoJSON.new(
+  geojson => %( :type<Feature>, :geometry(
+      %( :type<LineString>, :coordinates(
+        [
+          [-74.0060, 40.7128],
+          [-73.9851, 40.7289],
+          [-73.9815, 40.7267],
+          [-74.0060, 40.7128]
+        ]
+      ))
+    )),
+  style => { :color<orange> }
+);
+
+$map.add-layer($geo);
+
 spurt "map.html", $map.render;
 say "wrote map.html";
 

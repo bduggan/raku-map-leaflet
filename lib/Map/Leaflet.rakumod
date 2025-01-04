@@ -122,10 +122,14 @@ method render {
 
     my $layers-js = "";
     for @!layers -> $l {
+      my $extend-bounds = "bounds.extend({ $l.name }.getBounds());";
+      if $l.can('render-latlng') {
+        $extend-bounds = "bounds.extend({ $l.render-latlng });";
+      }
       $layers-js ~= qq:to/JS/.indent(6);
       { $l.render }
       { $l.name }.addTo(map);
-      bounds.extend({ $l.name }.getBounds());
+      $extend-bounds
       JS
     }
 
@@ -211,6 +215,16 @@ counterparts, and then render the entire page to generate the javascript.
 There are default values for many of the leaflet objects, in an attempt to
 make common cases work more easily out of the box.
 
+When creating layers, markers, icons, etc., methods named C<add-*> are provided
+with convenient interfaces.  For more control, use the C<create-*> methods, which
+pass the options to the constructor for the corresponding object.  For instance,
+C<add-marker> is a convenient way to add a marker, while C<create-marker> calls
+the constructor for C<Map::Leaflet::Marker>, adds it to the layers of the map,
+and returns it.  In other words, C<create-geojson-layer> is equivalent to
+C<add-layer(Map::Leaflet::GeoJSON.new(|%options))>.
+
+See the C<eg/> directory for more examples.
+
 =head1 METHODS
 
 =head2 new
@@ -265,7 +279,7 @@ The version of leaflet.js and leaflet-providers.js to use.  Defaults to 1.9.4 an
 
 Add a marker.  The first argument is a hash with C<lat> and C<lon> keys, and the second argument
 is an optional popup text.  Or the first two arguments can be numeric for the lat + lon.
-See C<create-marker> below for a more flexible way to create markers.
+See C<create-marker> below for a more flexible way to create markers.  Returns a C<Map::Leaflet::Marker> object.
 
 =head2 create-div-icon
 
@@ -297,6 +311,8 @@ Create a marker.  Accepts all of the leaflet.js options.  See L<https://leafletj
 Also accepts popup-text as an option to generate a popup that is bound to the marker.
 
 Defaults to False values for autoPan and autoPanFocus.
+
+Returns a new C<Map::Leaflet::Marker>.
 
 =head2 add-geojson
 
