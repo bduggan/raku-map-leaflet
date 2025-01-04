@@ -217,11 +217,10 @@ make common cases work more easily out of the box.
 
 When creating layers, markers, icons, etc., methods named C<add-*> are provided
 with convenient interfaces.  For more control, use the C<create-*> methods, which
-pass the options to the constructor for the corresponding object.  For instance,
-C<add-marker> is a convenient way to add a marker, while C<create-marker> calls
-the constructor for C<Map::Leaflet::Marker>, adds it to the layers of the map,
-and returns it.  In other words, C<create-geojson-layer> is equivalent to
-C<add-layer(Map::Leaflet::GeoJSON.new(|%options))>.
+pass the options to the constructor for the corresponding object.
+
+In other words, C<create-geojson-layer(...)> is equivalent to
+C<add-layer(Map::Leaflet::GeoJSON.new(...))>.
 
 See the C<eg/> directory for more examples.
 

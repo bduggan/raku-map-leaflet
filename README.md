@@ -44,7 +44,9 @@ The `Map::Leaflet` class represents a map which can be rendered as HTML. Use a m
 
 There are default values for many of the leaflet objects, in an attempt to make common cases work more easily out of the box.
 
-When creating layers, markers, icons, etc., methods named `add-*` are provided with convenient interfaces. For more control, use the `create-*` methods, which pass the options to the constructor for the corresponding object. For instance, `add-marker` is a convenient way to add a marker, while `create-marker` calls the constructor for `Map::Leaflet::Marker`, adds it to the layers of the map, and returns it. In other words, `create-geojson-layer` is equivalent to `add-layer(Map::Leaflet::GeoJSON.new(|%options))`.
+When creating layers, markers, icons, etc., methods named `add-*` are provided with convenient interfaces. For more control, use the `create-*` methods, which pass the options to the constructor for the corresponding object.
+
+In other words, `create-geojson-layer(...)` is equivalent to `add-layer(Map::Leaflet::GeoJSON.new(...))`.
 
 See the `eg/` directory for more examples.
 
