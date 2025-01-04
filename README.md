@@ -44,6 +44,10 @@ The `Map::Leaflet` class represents a map which can be rendered as HTML. Use a m
 
 There are default values for many of the leaflet objects, in an attempt to make common cases work more easily out of the box.
 
+When creating layers, markers, icons, etc., methods named `add-*` are provided with convenient interfaces. For more control, use the `create-*` methods, which pass the options to the constructor for the corresponding object. For instance, `add-marker` is a convenient way to add a marker, while `create-marker` calls the constructor for `Map::Leaflet::Marker`, adds it to the layers of the map, and returns it. In other words, `create-geojson-layer` is equivalent to `add-layer(Map::Leaflet::GeoJSON.new(|%options))`.
+
+See the `eg/` directory for more examples.
+
 METHODS
 =======
 
@@ -94,8 +98,9 @@ add-marker
 ----------
 
     $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
+    $map.add-marker( 40.7128, -74.0060, "New York City");
 
-Add a marker. The first argument is a hash with `lat` and `lon` keys, and the second argument is an optional popup text. See `create-marker` below for a more flexible way to create markers.
+Add a marker. The first argument is a hash with `lat` and `lon` keys, and the second argument is an optional popup text. Or the first two arguments can be numeric for the lat + lon. See `create-marker` below for a more flexible way to create markers. Returns a `Map::Leaflet::Marker` object.
 
 create-div-icon
 ---------------
@@ -126,6 +131,8 @@ create-marker
 Create a marker. Accepts all of the leaflet.js options. See [https://leafletjs.com/reference.html#marker](https://leafletjs.com/reference.html#marker). Also accepts popup-text as an option to generate a popup that is bound to the marker.
 
 Defaults to False values for autoPan and autoPanFocus.
+
+Returns a new `Map::Leaflet::Marker`.
 
 add-geojson
 -----------
