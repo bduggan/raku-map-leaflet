@@ -96,11 +96,11 @@ subtest 'Circle creation' => {
     my $map = Map::Leaflet.new;
     
     # Fixed: Pass options hash for circle creation
-    lives-ok { $map.add-circle(:center([40.7128, -74.0060]), :radius(1000)) }, 'Can add circle with lat/lon/radius';
-    lives-ok { $map.add-circle(center => [40.7128, -74.0060], radius => 1000) }, 'Can add circle with named params';
+    lives-ok { $map.create-circle(:center([40.7128, -74.0060]), :radius(1000)) }, 'Can add circle with lat/lon/radius';
+    lives-ok { $map.create-circle(center => [40.7128, -74.0060], radius => 1000) }, 'Can add circle with named params';
     
     throws-like 
-        { $map.add-circle(center => [40.7128, -74.0060]) },
+        { $map.create-circle(center => [40.7128, -74.0060]) },
         Exception,
         message => /'missing radius'/,
         'Dies when radius is missing';
