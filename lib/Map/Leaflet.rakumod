@@ -12,6 +12,8 @@ has $.zoom = 13;
 has $.width = '95vw';
 has $.height = '95vh';
 has $.border = '1px solid #000';
+has $.output-path = 'map-leaflet-tmp.html';
+
 method map-css {
   qq:to/CSS/;
       #map \{
@@ -166,15 +168,21 @@ $start-pos
     END
 }
 
-method show {
-  my $filename = $*CWD.child('map-leaflet-tmp.html');
+method write {
+  my $filename = $.output-path.IO;
+  my $is-new = not $filename.e;
   $filename.spurt: self.render;
+  return $is-new;
+}
+
+method show {
+  my $filename = $.output-path.IO;
+  self.write;
   my $cmd = $*DISTRO.is-win ?? 'start'
           !! $*DISTRO ~~ /macos/ ?? 'open'
           !! 'xdg-open';
   run <<$cmd $filename>>;
 }
-
 
 =begin pod
 

@@ -15,6 +15,11 @@ sub quote-value($value) is export {
     when Hash { to-json($value, :!pretty) }
     when Numeric { $value }
     when .^name ~~ /Leaflet/ { $value.Str }
+    when Pair { # javascript point block
+      $value.key ~ ' => ' ~ $value.value
+    }
+    when Array|List { '[' ~ $value.map({ quote-value($_) }).join(', ') ~ ']' }
+
     default {
       warn "Unknown value type: { $value.^name }";
       $value.Str
