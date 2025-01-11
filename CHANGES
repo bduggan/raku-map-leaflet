@@ -1,3 +1,10 @@
+0.0.8 2025-01-11
+    - allow pairs for JS
+    - output-path, write
+    - allow strings for lat/lon
+    - add all attributes for base map
+    - latlng class
+
 0.0.7 2025-01-11
     Add map.show
 
