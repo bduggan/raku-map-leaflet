@@ -14,7 +14,7 @@ class Map::Leaflet::InteractiveLayer is Map::Leaflet::Layer {
 class Map::Leaflet::GeoJSON is Map::Leaflet::InteractiveLayer {
   also does LeafObject;
   has $.name = 'geojson_' ~ ++$i;
-  has $.geojson;
+  has $.geojson where Str|Hash;
   has $.pointToLayer;
   has $.style;
   has $.onEachFeature;

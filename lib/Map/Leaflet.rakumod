@@ -148,8 +148,8 @@ method create-marker(:@latlng, :%options) {
   $new;
 }
 
-multi method add-marker(Numeric $lat, Numeric $lon, $popup-text?) {
-  self.create-marker(:latlng($lat, $lon), options => %( :$popup-text ) );
+multi method add-marker($lat where Numeric|Str, $lon where Numeric|Str, $popup-text?) {
+  self.create-marker(:latlng(+$lat, +$lon), options => %( :$popup-text ) );
 }
 
 multi method add-marker(
@@ -251,7 +251,7 @@ use Map::Leaflet;
 my $map = Map::Leaflet.new;
 $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
 $map.add-marker({ :lat(40.7589), :lon(-73.9851) }, "Empire State Building");
-$map.add-marker({ :lat(40.7267), :lon(-73.9815) }, "Tompkins Square Park");
+$map.add-marker( 40.7267, -73.9815 "Tompkins Square Park");
 
 $map.add-geojson(q:to/GEOJSON/);
 {
