@@ -13,8 +13,8 @@ my $custom-map = Map::Leaflet.new(
     width => 1024,
     height => 768
 );
-is $custom-map.center<lat>, 40.7128, 'Custom latitude set correctly';
-is $custom-map.center<lon>, -74.0060, 'Custom longitude set correctly';
+is $custom-map.center.lat, 40.7128, 'Custom latitude set correctly';
+is $custom-map.center.lon, -74.0060, 'Custom longitude set correctly';
 is $custom-map.zoom, 15, 'Custom zoom set correctly';
 
 $custom-map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "Test Marker");

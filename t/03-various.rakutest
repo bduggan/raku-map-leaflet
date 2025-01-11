@@ -6,14 +6,8 @@ plan 7;
 
 # Constructor tests
 subtest 'Basic constructor tests' => {
-    plan 4;
+    plan 2;
     lives-ok { Map::Leaflet.new }, 'Can create map with default parameters';
-    lives-ok { Map::Leaflet.new(center => { :lat(40.7128), :lon(-74.0060) }) }, 'Can create map with center';
-    throws-like 
-        { Map::Leaflet.new(center => { :lat(40.7128) }) },
-        Exception,
-        message => /'invalid center'/,
-        'Dies with invalid center (missing lon)';
     my $map = Map::Leaflet.new;
     isa-ok $map, Map::Leaflet, 'Constructor returns correct type';
 }

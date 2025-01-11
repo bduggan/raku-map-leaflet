@@ -12,7 +12,8 @@
     "Map::Leaflet::Marker" : "lib/Map/Leaflet/Marker.rakumod",
     "Map::Leaflet::Path" : "lib/Map/Leaflet/Path.rakumod",
     "Map::Leaflet::Circle" : "lib/Map/Leaflet/Path.rakumod",
-    "Map::Leaflet::Utils" : "lib/Map/Leaflet/Utils.rakumod"
+    "Map::Leaflet::Utils" : "lib/Map/Leaflet/Utils.rakumod",
+    "Map::Leaflet::LatLng" : "lib/Map/Leaflet/LatLng.rakumod"
   },
   "build-depends" : [ ],
   "depends" : [

@@ -16,6 +16,13 @@ has $.height = '95vh';
 has $.border = '1px solid #000';
 has $.output-path = 'map-leaflet-tmp.html';
 
+submethod TWEAK {
+  if $!center ~~ Hash {
+    my %center = lat => $!center<lat>,  lng => $!center<lon> // $!center<lng>;
+    $!center = Map::Leaflet::LatLng.new(|%center);
+  }
+}
+
 method map-css {
   qq:to/CSS/;
       #map \{
