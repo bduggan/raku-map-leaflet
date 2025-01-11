@@ -53,6 +53,8 @@ See the `eg/` directory for more examples.
 ATTRIBUTES
 ----------
 
+All of the attributes listed here [https://leafletjs.com/reference.html#map-factory](https://leafletjs.com/reference.html#map-factory) are available as attributes in the `Map::Leaflet` object. They will be passed to the javascript constructor. For callbacks, use a `Pair` object -- the key and value will be the left and right hand side of a javascript pointy block.
+
 title
 -----
 
@@ -89,6 +91,11 @@ leaflet-version, leaflet-providers-version
 ------------------------------------------
 
 The version of leaflet.js and leaflet-providers.js to use. Defaults to 1.9.4 and 1.13.0, respectively.
+
+other attributes
+----------------
+
+Other attributes that are passed on to the javascript constructor include: `preferCanvas`, `attributionControl`, `zoomControl`, `closePopupOnClick`, `boxZoom`, `doubleClickZoom`, `dragging`, `zoomSnap`, `zoomDelta`, `trackResize`, `inertia`, `inertiaDeceleration`, `inertiaMaxSpeed`, `easeLinearity`, `worldCopyJump`, `maxBoundsViscosity`, `keyboard`, `keyboardPanDelta`, `scrollWheelZoom`, `wheelDebounceTime`, `wheelPxPerZoomLevel`, `tapHold`, `tapTolerance`, `touchZoom`, `bounceAtZoomLimits`, `crs`, `minZoom`, `maxZoom`, `maxBounds`, `renderer`, `zoomAnimation`, `zoomAnimationThreshold`, `fadeAnimation`, `markerZoomAnimation`, `transform3DLimit`.
 
 METHODS
 =======

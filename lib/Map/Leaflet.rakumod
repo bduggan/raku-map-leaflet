@@ -53,6 +53,53 @@ has @.layers;
 has $.preferCanvas;
 has $.attributionControl;
 has $.zoomControl;
+has $.closePopupOnClick;
+has $.boxZoom;
+has $.doubleClickZoom;
+has $.dragging;
+has $.zoomSnap;
+has $.zoomDelta;
+has $.trackResize;
+
+# panning inertia options
+has $.inertia;
+has $.inertiaDeceleration;
+has $.inertiaMaxSpeed;
+has $.easeLinearity;
+has $.worldCopyJump;
+has $.maxBoundsViscosity;
+
+# keyboard navigation options
+has $.keyboard;
+has $.keyboardPanDelta;
+
+# mousewheel options
+has $.scrollWheelZoom;
+has $.wheelDebounceTime;
+has $.wheelPxPerZoomLevel;
+
+# touch interaction options
+has $.tapHold;
+has $.tapTolerance;
+has $.touchZoom;
+has $.bounceAtZoomLimits;
+
+# map state options
+has $.crs;
+# has $.center; above
+# has $.zoom; above
+has $.minZoom;
+has $.maxZoom;
+# has $.layers; # above
+has $.maxBounds;
+has $.renderer;
+
+# animation options
+has $.zoomAnimation;
+has $.zoomAnimationThreshold;
+has $.fadeAnimation;
+has $.markerZoomAnimation;
+has $.transform3DLimit;
 
 multi method add-circle(Numeric $lat, Numeric $lon, Numeric $radius, %opts) {
   self.create-circle( center => [$lat, $lon], radius => $radius, |%opts );
@@ -249,6 +296,11 @@ See the C<eg/> directory for more examples.
 
 =head2 ATTRIBUTES
 
+All of the attributes listed here L< https://leafletjs.com/reference.html#map-factory>
+are available as attributes in the C<Map::Leaflet> object.  They will be passed
+to the javascript constructor.  For callbacks, use a C<Pair> object -- the key
+and value will be the left and right hand side of a javascript pointy block.
+
 =head2 title
 
 The title of the HTML page.  Defaults to 'Map'.
@@ -279,6 +331,10 @@ Here are a few of the providers listed:  C<CartoDB.Positron>, C<OpenStreetMap.Ma
 =head2 leaflet-version, leaflet-providers-version
 
 The version of leaflet.js and leaflet-providers.js to use.  Defaults to 1.9.4 and 1.13.0, respectively.
+
+=head2 other attributes
+
+Other attributes that are passed on to the javascript constructor include: C<preferCanvas>, C<attributionControl>, C<zoomControl>, C<closePopupOnClick>, C<boxZoom>, C<doubleClickZoom>, C<dragging>, C<zoomSnap>, C<zoomDelta>, C<trackResize>, C<inertia>, C<inertiaDeceleration>, C<inertiaMaxSpeed>, C<easeLinearity>, C<worldCopyJump>, C<maxBoundsViscosity>, C<keyboard>, C<keyboardPanDelta>, C<scrollWheelZoom>, C<wheelDebounceTime>, C<wheelPxPerZoomLevel>, C<tapHold>, C<tapTolerance>, C<touchZoom>, C<bounceAtZoomLimits>, C<crs>, C<minZoom>, C<maxZoom>, C<maxBounds>, C<renderer>, C<zoomAnimation>, C<zoomAnimationThreshold>, C<fadeAnimation>, C<markerZoomAnimation>, C<transform3DLimit>.
 
 =head1 METHODS
 
