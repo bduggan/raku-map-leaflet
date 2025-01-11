@@ -192,6 +192,13 @@ render
 
 Generate a complete HTML page for the map (including html, head, body, etc.). Returns a string.
 
+show
+----
+
+    $map.show;
+
+Generate the HTML and open it in a browser. This creates a file named "map-leaflet-tmp.html" in the current directory.
+
 SEE ALSO
 ========
 

@@ -166,6 +166,16 @@ $start-pos
     END
 }
 
+method show {
+  my $filename = $*CWD.child('map-leaflet-tmp.html');
+  $filename.spurt: self.render;
+  my $cmd = $*DISTRO.is-win ?? 'start'
+          !! $*DISTRO ~~ /macos/ ?? 'open'
+          !! 'xdg-open';
+  run <<$cmd $filename>>;
+}
+
+
 =begin pod
 
 =head1 NAME
@@ -367,6 +377,12 @@ Returns a new C<Map::Leaflet::Circle>.
     spurt "map.html", $map.render;
 
 Generate a complete HTML page for the map (including html, head, body, etc.).  Returns a string.
+
+=head2 show
+
+    $map.show;
+
+Generate the HTML and open it in a browser.  This creates a file named "map-leaflet-tmp.html" in the current directory.
 
 =head1 SEE ALSO
 
