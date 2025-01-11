@@ -242,6 +242,39 @@ C<add-layer(Map::Leaflet::GeoJSON.new(...))>.
 
 See the C<eg/> directory for more examples.
 
+=head2 ATTRIBUTES
+
+=head2 title
+
+The title of the HTML page.  Defaults to 'Map'.
+
+=head2 center
+
+A hash with C<lat> and C<lon> keys.
+
+=head2 zoom
+
+The zoom level (integer).
+
+=head2 width, height
+
+The height and width of the map.  Defaults to 95vw and 95vh, respectively.
+
+=head2 extra-css
+
+Extra CSS to include in the HTML.  The default adds a border, centers the map,
+and provides a class for div-icons.
+
+=head2 tile-provider
+
+The tile provider to use.  Defaults to 'CartoDB.Positron'.  For a complete list of providers, see L<https://leaflet-extras.github.io/leaflet-providers/preview/>.
+
+Here are a few of the providers listed:  C<CartoDB.Positron>, C<OpenStreetMap.Mapnik>, C<Esri.WorldstreetMap>
+
+=head2 leaflet-version, leaflet-providers-version
+
+The version of leaflet.js and leaflet-providers.js to use.  Defaults to 1.9.4 and 1.13.0, respectively.
+
 =head1 METHODS
 
 =head2 new
@@ -254,40 +287,7 @@ See the C<eg/> directory for more examples.
 
 Constructor.  If no center is specified, then bounds are computed, and
 the starting view will have a zoom level and extents that fit all of
-the layers that have been added.
-
-Other options to the constructor are:
-
-=head4 title
-
-The title of the HTML page.  Defaults to 'Map'.
-
-=head4 center
-
-A hash with C<lat> and C<lon> keys.
-
-=head4 zoom
-
-The zoom level (integer).
-
-=head4 width, height
-
-The height and width of the map.  Defaults to 95vw and 95vh, respectively.
-
-=head4 extra-css
-
-Extra CSS to include in the HTML.  The default adds a border, centers the map,
-and provides a class for div-icons.
-
-=head4 tile-provider
-
-The tile provider to use.  Defaults to 'CartoDB.Positron'.  For a complete list of providers, see L<https://leaflet-extras.github.io/leaflet-providers/preview/>.
-
-Here are a few of the providers listed:  C<CartoDB.Positron>, C<OpenStreetMap.Mapnik>, C<Esri.WorldstreetMap>
-
-=head4 leaflet-version, leaflet-providers-version
-
-The version of leaflet.js and leaflet-providers.js to use.  Defaults to 1.9.4 and 1.13.0, respectively.
+the layers that have been added.  See C<ATTRIBUTES> for more options.
 
 =head2 add-marker
 
