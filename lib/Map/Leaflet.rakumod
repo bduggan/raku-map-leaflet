@@ -332,6 +332,10 @@ Here are a few of the providers listed:  C<CartoDB.Positron>, C<OpenStreetMap.Ma
 
 The version of leaflet.js and leaflet-providers.js to use.  Defaults to 1.9.4 and 1.13.0, respectively.
 
+=head2 output-path
+
+The filename to write the HTML to.  Defaults to 'map-leaflet-tmp.html'.
+
 =head2 other attributes
 
 Other attributes that are passed on to the javascript constructor include: C<preferCanvas>, C<attributionControl>, C<zoomControl>, C<closePopupOnClick>, C<boxZoom>, C<doubleClickZoom>, C<dragging>, C<zoomSnap>, C<zoomDelta>, C<trackResize>, C<inertia>, C<inertiaDeceleration>, C<inertiaMaxSpeed>, C<easeLinearity>, C<worldCopyJump>, C<maxBoundsViscosity>, C<keyboard>, C<keyboardPanDelta>, C<scrollWheelZoom>, C<wheelDebounceTime>, C<wheelPxPerZoomLevel>, C<tapHold>, C<tapTolerance>, C<touchZoom>, C<bounceAtZoomLimits>, C<crs>, C<minZoom>, C<maxZoom>, C<maxBounds>, C<renderer>, C<zoomAnimation>, C<zoomAnimationThreshold>, C<fadeAnimation>, C<markerZoomAnimation>, C<transform3DLimit>.
@@ -451,7 +455,14 @@ Generate a complete HTML page for the map (including html, head, body, etc.).  R
 
     $map.show;
 
-Generate the HTML and open it in a browser.  This creates a file named "map-leaflet-tmp.html" in the current directory.
+Generate the HTML, write it to <$.output-path>, and open a browser to view it.
+
+=head2 write
+
+    $map.write;
+
+Generate the HTML and write it to <$.output-path>.  Returns true if a new file
+was created, false if the file already existed and was overwritten.
 
 =head1 SEE ALSO
 

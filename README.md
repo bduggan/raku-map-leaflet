@@ -92,6 +92,11 @@ leaflet-version, leaflet-providers-version
 
 The version of leaflet.js and leaflet-providers.js to use. Defaults to 1.9.4 and 1.13.0, respectively.
 
+output-path
+-----------
+
+The filename to write the HTML to. Defaults to 'map-leaflet-tmp.html'.
+
 other attributes
 ----------------
 
@@ -212,7 +217,14 @@ show
 
     $map.show;
 
-Generate the HTML and open it in a browser. This creates a file named "map-leaflet-tmp.html" in the current directory.
+Generate the HTML, write it to <$.output-path>, and open a browser to view it.
+
+write
+-----
+
+    $map.write;
+
+Generate the HTML and write it to <$.output-path>. Returns true if a new file was created, false if the file already existed and was overwritten.
 
 SEE ALSO
 ========
