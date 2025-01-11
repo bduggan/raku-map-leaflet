@@ -13,5 +13,4 @@ my $circle = $map.create-circle(
 
 $map.add-circle( 40.7128, -74.0060, 100, { color => 'blue' } );
 
-spurt 'circle.html', $map.render;
-say "wrote circle.html";
+$map.show;
