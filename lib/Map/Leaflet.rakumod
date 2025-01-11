@@ -1,13 +1,15 @@
 use JSON::Fast;
+use Map::Leaflet::LatLng;
 use Map::Leaflet::Path;
 use Map::Leaflet::Icon;
 use Map::Leaflet::Marker;
 use Map::Leaflet::Utils;
 
 unit class Map::Leaflet;
+also does LeafObject;
 
 has Bool $.fit-bounds = True;
-has %.center = %( :lat(0), :lon(0) );
+has $.center = Map::Leaflet::LatLng.new( :lat(0), :lng(0) );
 has $.zoom = 13;
 has $.width = '95vw';
 has $.height = '95vh';
@@ -48,9 +50,9 @@ has @.markers;
 has Map::Leaflet::Icon @.icons;
 has @.layers;
 
-method TWEAK {
-  die "invalid center" unless %!center<lat>:exists and %!center<lon>:exists;
-}
+has $.preferCanvas;
+has $.attributionControl;
+has $.zoomControl;
 
 multi method add-circle(Numeric $lat, Numeric $lon, Numeric $radius, %opts) {
   self.create-circle( center => [$lat, $lon], radius => $radius, |%opts );
@@ -135,8 +137,11 @@ method render {
       JS
     }
 
+    my $opts-str = self.construct-option-string(exclude =>
+        set <fit-bounds width height border output-path extra-css title leaflet-version leaflet-providers-version tile-provider leaflet-css-url leaflet-js-url leaflet-providers-js-url markers icons layers>);
+
     my $start-pos = $!fit-bounds ?? "map.fitBounds(bounds);"
-    !! "map.setView([{%!center<lat>}, {%!center<lon>}], {$!zoom});";
+    !! "map.setView({ $!center.render }, {$!zoom});";
 
     qq:to/END/;
     <!DOCTYPE html>
@@ -154,7 +159,7 @@ method render {
     <body>
         <div id="map"></div>
         <script>
-            var map = L.map('map', \{ center: [ { %!center<lat> }, { %!center<lon> } ], zoom: { $!zoom } });
+            var map = L.map('map', $opts-str );
             L.tileLayer.provider('{$.tile-provider}').addTo(map);
             L.control.scale().addTo(map);
             let bounds = L.latLngBounds();
