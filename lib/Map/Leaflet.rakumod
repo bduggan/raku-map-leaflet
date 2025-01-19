@@ -123,8 +123,6 @@ method add-layer($layer) {
   @!layers.push: $layer;
 }
 
-
-
 method create-div-icon(*%options) {
   my $new = Map::Leaflet::DivIcon.new(|%options);
   @!icons.push: $new;

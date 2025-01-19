@@ -31,3 +31,5 @@ class Map::Leaflet::GeoJSON is Map::Leaflet::InteractiveLayer {
     $js;
   }
 }
+
+

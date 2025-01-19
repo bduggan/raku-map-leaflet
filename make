@@ -54,16 +54,17 @@ multi MAIN('docs') {
   shell qq:to/SH/;
     raku -Ilib --doc=Markdown $readme-src >> README.md
     SH
-  #sub recurse($dir) {
-  #  recurse($_) for dir($dir, test => { $dir.IO.child($_).d && !.starts-with('.') });
-  # for dir($dir, test => { /\.rakumod$/ }) -> $f {
-  #   my $path = $f.IO.relative($*PROGRAM.parent);
-  #   my $out = 'docs'.IO.child: $path.subst(/\.rakumod$/, '.md');
-  #   $out.dirname.IO.d or mkdir $out.dirname;
-  #   shell qq:x[raku -Ilib --doc=Markdown $f > $out];
-  # }
-  #
-  #recurse('lib');
+  sub recurse($dir) {
+    recurse($_) for dir($dir, test => { $dir.IO.child($_).d && !.starts-with('.') });
+     for dir($dir, test => { /\.rakumod$/ }) -> $f {
+       my $path = $f.IO.relative($*PROGRAM.parent);
+       my $out = 'docs'.IO.child: $path.subst(/\.rakumod$/, '.md');
+       $out.dirname.IO.d or mkdir $out.dirname;
+       shell qq:x[raku -Ilib --doc=Markdown $f > $out];
+     }
+   }
+  
+   recurse('lib');
 }
 
 multi MAIN('bumpdist') {
