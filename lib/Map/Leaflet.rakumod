@@ -195,6 +195,10 @@ multi method add-marker($lat where Numeric|Str, $lon where Numeric|Str, $popup-t
   self.create-marker(:latlng(+$lat, +$lon), options => %( :$popup-text ) );
 }
 
+multi method add-marker(@latlng where *.elems == 2, $popup-text?) {
+  self.add-marker(|@latlng, $popup-text);
+}
+
 multi method add-marker(
   %coords where { $_<lat>:exists and $_<lon>:exists },
   $popup-text?
