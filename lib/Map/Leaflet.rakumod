@@ -111,6 +111,40 @@ has $.transform3DLimit;
 multi method add-circle(Numeric $lat, Numeric $lon, Numeric $radius, %opts) {
   self.create-circle( center => [$lat, $lon], radius => $radius, |%opts );
 }
+
+multi method add-rectangle($lat1, $lon1, $lat2, $lon2, *%opts) {
+  self.create-rectangle( bounds => [[+$lat1, +$lon1], [+$lat2, +$lon2]], |%opts );
+}
+
+method create-rectangle(*%opts is copy) {
+  my $bounds = %opts<bounds>:delete or die "bounds is required";
+  my $new = Map::Leaflet::Rectangle.new(|%opts, bounds => $bounds);
+  @!layers.push: $new;
+  $new;
+}
+
+method add-polygon(*%opts) {
+  self.create-polygon(|%opts);
+}
+
+method create-polygon(*%opts is copy) {
+  my @latlngs := %opts<latlngs>:delete or die "latlngs is required";
+  my $new = Map::Leaflet::Polygon.new(|%opts, :@latlngs);
+  @!layers.push: $new;
+  $new;
+}
+
+method add-polyline(*%opts) {
+  self.create-polyline(|%opts);
+}
+
+method create-polyline(*%opts is copy) {
+  my @latlngs := %opts<latlngs>:delete or die "latlngs is required";
+  my $new = Map::Leaflet::Polyline.new(|%opts, :@latlngs);
+  @!layers.push: $new;
+  $new;
+}
+
 multi method create-circle(*%opts is copy) {
   my $center = %opts<center>:delete or die "center is required";
   die "missing radius" unless %opts<radius>:exists;

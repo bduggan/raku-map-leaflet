@@ -85,7 +85,11 @@ class Map::Leaflet::Circle is Map::Leaflet::Path is export {
 class Map::Leaflet::Polygon is Map::Leaflet::Path is export {
   also does LeafObject;
   has $.name = 'polygon_' ~ ++$i;
+  # [[lat1, lon1], [lat2, lon2], ...]
   has @.latlngs;
+  submethod TWEAK {
+    die "polygon coordinates must have two elements" if @!latlngs[0].elems != 2;
+  }
 
   method render {
     my $latlngs = '['~
