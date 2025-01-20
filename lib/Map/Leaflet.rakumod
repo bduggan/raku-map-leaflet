@@ -185,6 +185,14 @@ method create-icon(*%options) {
   $new;
 }
 
+method add-icons( *@icons ) {
+  @!icons.append: @icons;
+}
+
+method add-markers( *@markers ) {
+  @!markers.append: @markers;
+}
+
 method create-marker(:@latlng, :%options) {
   my $new = Map::Leaflet::Marker.new(:@latlng, |%options);
   @!markers.push: $new;

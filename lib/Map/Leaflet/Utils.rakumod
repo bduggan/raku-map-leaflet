@@ -1,7 +1,7 @@
 unit module Map::Leaflet::Utils;
 use JSON::Fast;
 
-subset PointStr of Str is export where { $_ eq 'auto' or /:s ^ '[' \d+ ',' \d+ ']' $/ };
+subset PointStr of Str is export where { $_ eq 'auto' or /:s ^ '[' <[0..9.-]>+ ',' <[0..9.-]>+ ']' $/ };
 
 sub escape-val(Str $val) is export {
   $val.subst(:g,  / "'" /, "\\'").subst(:g, "\n", "\\n");
