@@ -500,6 +500,63 @@ be a string or a hash.
 Create a circle.  Accepts all of the leaflet.js options.  See L<https://leafletjs.com/reference.html#circle>.
 Returns a new C<Map::Leaflet::Circle>.
 
+=head2 add-rectangle, create-rectangle
+
+    $map.add-rectangle(40.7128, -74.0060, 40.7589, -73.9851, color => 'red');
+    $map.add-rectangle([40.7128, -74.0060, 40.7589, -73.9851], color => 'red');
+    
+    my $rectangle = $map.create-rectangle(
+        bounds => [[40.7128, -74.0060], [40.7589, -73.9851]],
+        color => 'red',
+        fillColor => 'red',
+        fillOpacity => 0.5,
+    );
+
+Create a rectangle. The bounds can be specified either as four separate coordinates (lat1, lon1, lat2, lon2) or as an array of four numbers. 
+Accepts all of the leaflet.js options. See L<https://leafletjs.com/reference.html#rectangle>.
+Returns a new C<Map::Leaflet::Rectangle>.
+
+=head2 add-polygon, create-polygon
+
+    my $polygon = $map.create-polygon(
+        latlngs => [
+            [40.7128, -74.0060],
+            [40.7589, -73.9851],
+            [40.7267, -73.9815]
+        ],
+        color => 'blue',
+        fillColor => 'blue',
+        fillOpacity => 0.3,
+    );
+
+    $map.add-polygon(latlngs => [[40.7128, -74.0060], [40.7589, -73.9851], [40.7267, -73.9815]]);
+
+Create a polygon. The C<latlngs> parameter is required and should be an array of coordinate pairs.
+Accepts all of the leaflet.js options. See L<https://leafletjs.com/reference.html#polygon>.
+Returns a new C<Map::Leaflet::Polygon>.
+
+=head2 add-polyline, create-polyline
+
+    my $polyline = $map.create-polyline(
+        latlngs => [
+            [40.7128, -74.0060],
+            [40.7589, -73.9851]
+        ],
+        color => 'red',
+        weight => 3,
+    );
+
+    $map.add-polyline(latlngs => [[40.7128, -74.0060], [40.7589, -73.9851]]);
+
+Create a polyline. The C<latlngs> parameter is required and should be an array of coordinate pairs.
+Accepts all of the leaflet.js options. See L<https://leafletjs.com/reference.html#polyline>.
+Returns a new C<Map::Leaflet::Polyline>.
+
+=head2 add-icons, add-markers
+
+These exist if you create icons or markers without using the C<create-*> methods.  They
+will add the objects to the map.  For examples, see C<Map::Leaflet::Icon>
+
 =head2 render
 
     spurt "map.html", $map.render;
