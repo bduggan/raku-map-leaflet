@@ -199,12 +199,14 @@ method create-marker(:@latlng, :%options) {
   $new;
 }
 
-multi method add-marker($lat where Numeric|Str, $lon where Numeric|Str, $popup-text?) {
-  self.create-marker(:latlng(+$lat, +$lon), options => %( :$popup-text ) );
+multi method add-marker($lat where Numeric|Str, $lon where Numeric|Str, $popup-text?, *%options) {
+  %options<popup-text> = $popup-text if $popup-text;
+  self.create-marker(:latlng(+$lat, +$lon), :%options);
 }
 
-multi method add-marker(@latlng where *.elems == 2, $popup-text?) {
-  self.add-marker(|@latlng, $popup-text);
+multi method add-marker(@latlng where *.elems == 2, $popup-text?, *%options) {
+  %options<popup-text> = $popup-text if $popup-text;
+  self.create-marker(:latlng(@latlng.map(+*)), :%options);
 }
 
 multi method add-marker(
