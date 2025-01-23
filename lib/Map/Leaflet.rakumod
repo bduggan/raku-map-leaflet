@@ -5,7 +5,7 @@ use Map::Leaflet::Icon;
 use Map::Leaflet::Marker;
 use Map::Leaflet::Utils;
 
-unit class Map::Leaflet;
+class Map::Leaflet {
 also does LeafObject;
 
 has Bool $.fit-bounds = True;
@@ -590,4 +590,11 @@ L<https://leafletjs.com/>
 Brian Duggan
 
 =end pod
+
+}
+
+sub EXPORT($m = Nil) {
+  return %( ) without $m;
+  %( $m => Map::Leaflet.new );
+}
 
