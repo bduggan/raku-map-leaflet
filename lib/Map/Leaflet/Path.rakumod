@@ -122,7 +122,7 @@ class Map::Leaflet::Polyline is Map::Leaflet::Path is export {
   }
 }
 
-class Map::Leaflet::Rectangle is Map::Leaflet::Path is export {
+class Map::Leaflet::Rectangle is Map::Leaflet::Polyline is export {
   also does LeafObject;
   has $.name = 'rectangle_' ~ ++$i;
   has @.bounds; # [[lat1, lon1], [lat2, lon2]]
