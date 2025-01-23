@@ -107,8 +107,8 @@ class Map::Leaflet::Polyline is Map::Leaflet::Path is export {
   also does LeafObject;
   has $.name = 'polyline_' ~ ++$i;
   has @.latlngs;
-  has $.smoothFactor;
-  has $.noClip;
+  has Numeric $.smoothFactor;
+  has Bool $.noClip;
 
   method render {
     my $latlngs = '['~
