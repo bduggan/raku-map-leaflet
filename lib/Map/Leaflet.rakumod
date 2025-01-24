@@ -354,6 +354,20 @@ C<add-layer(Map::Leaflet::GeoJSON.new(...))>.
 
 See the C<eg/> directory for more examples.
 
+=head2 EXPORTS
+
+If an argument is given when using the module, it is treated as the name of
+a new object to create.  e.g.
+
+    use Map::Leaflet 'map';
+    map.add-marker(40.7128, -74.0060, "New York City");
+
+is the same as
+
+    use Map::Leaflet 'map';
+    my \map = Map::Leaflet.new;
+    map.add-marker(40.7128, -74.0060, "New York City");
+
 =head2 ATTRIBUTES
 
 All of the attributes listed here L< https://leafletjs.com/reference.html#map-factory>

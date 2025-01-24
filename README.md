@@ -53,6 +53,20 @@ In other words, `create-geojson-layer(...)` is equivalent to `add-layer(Map::Lea
 
 See the `eg/` directory for more examples.
 
+EXPORTS
+-------
+
+If an argument is given when using the module, it is treated as the name of a new object to create. e.g.
+
+    use Map::Leaflet 'map';
+    map.add-marker(40.7128, -74.0060, "New York City");
+
+is the same as
+
+    use Map::Leaflet 'map';
+    my \map = Map::Leaflet.new;
+    map.add-marker(40.7128, -74.0060, "New York City");
+
 ATTRIBUTES
 ----------
 
