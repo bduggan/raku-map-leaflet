@@ -108,7 +108,7 @@ has $.fadeAnimation;
 has $.markerZoomAnimation;
 has $.transform3DLimit;
 
-multi method add-circle(Numeric $lat, Numeric $lon, Numeric $radius, %opts) {
+multi method add-circle(Numeric $lat, Numeric $lon, Numeric $radius, *%opts) {
   self.create-circle( center => [$lat, $lon], radius => $radius, |%opts );
 }
 
