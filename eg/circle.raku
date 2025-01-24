@@ -1,6 +1,4 @@
-use Map::Leaflet;
-
-my $map = Map::Leaflet.new;
+use Map::Leaflet '$map';
 
 # center in nyc
 my $circle = $map.create-circle(

@@ -1,0 +1,9 @@
+use Test;
+
+use Map::Leaflet 'map';
+
+plan 2;
+
+ok map, 'created map';
+like map.render, /html/, 'render';
+
