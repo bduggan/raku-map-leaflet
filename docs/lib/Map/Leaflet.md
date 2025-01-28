@@ -224,6 +224,7 @@ add-rectangle, create-rectangle
 
     $map.add-rectangle(40.7128, -74.0060, 40.7589, -73.9851, color => 'red');
     $map.add-rectangle([40.7128, -74.0060, 40.7589, -73.9851], color => 'red');
+    $map.add-rectangle([ [40.7128, -74.0060], [40.7589, -73.9851]], color => 'red');
 
     my $rectangle = $map.create-rectangle(
         bounds => [[40.7128, -74.0060], [40.7589, -73.9851]],

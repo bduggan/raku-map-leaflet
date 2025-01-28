@@ -116,6 +116,10 @@ multi method add-rectangle($lat1, $lon1, $lat2, $lon2, *%opts) {
   self.create-rectangle( bounds => [[+$lat1, +$lon1], [+$lat2, +$lon2]], |%opts );
 }
 
+multi method add-rectangle([ $lat1, $lon1 ], [ $lat2, $lon2 ], *%opts) {
+  self.create-rectangle( bounds => [[+$lat1, +$lon1], [+$lat2, +$lon2]], |%opts );
+}
+
 multi method add-rectangle(@bbox where *.elems == 4, *%opts) {
   self.add-rectangle(|@bbox, |%opts);
 }
@@ -523,6 +527,7 @@ Returns a new C<Map::Leaflet::Circle>.
 
     $map.add-rectangle(40.7128, -74.0060, 40.7589, -73.9851, color => 'red');
     $map.add-rectangle([40.7128, -74.0060, 40.7589, -73.9851], color => 'red');
+    $map.add-rectangle([ [40.7128, -74.0060], [40.7589, -73.9851]], color => 'red');
     
     my $rectangle = $map.create-rectangle(
         bounds => [[40.7128, -74.0060], [40.7589, -73.9851]],
