@@ -127,6 +127,11 @@ class Map::Leaflet::Rectangle is Map::Leaflet::Polyline is export {
   has $.name = 'rectangle_' ~ ++$i;
   has @.bounds; # [[lat1, lon1], [lat2, lon2]]
 
+  method TWEAK {
+    die "rectangle bounds must have two elements" if @!bounds[0].elems != 2;
+    @!bounds = @!bounds.map({ [ +.[0], +.[1]] });
+  }
+
   method render {
     my $bounds = @.bounds.raku;
     my $opts-str = self.construct-option-string(exclude => set <bounds>);
