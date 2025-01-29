@@ -124,9 +124,8 @@ multi method add-rectangle(@bbox where *.elems == 4, *%opts) {
   self.add-rectangle(|@bbox, |%opts);
 }
 
-method create-rectangle(*%opts is copy) {
-  my $bounds = %opts<bounds>:delete or die "bounds is required";
-  my $new = Map::Leaflet::Rectangle.new(|%opts, bounds => $bounds);
+method create-rectangle(*%opts) {
+  my $new = Map::Leaflet::Rectangle.new(|%opts);
   @!layers.push: $new;
   $new;
 }
