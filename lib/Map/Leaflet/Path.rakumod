@@ -47,9 +47,9 @@ class Map::Leaflet::Path is Map::Leaflet::InteractiveLayer is export {
 
   also does LeafObject;
   has $.name = 'path_' ~ $i++;
-  has $.stroke;
-  has $.color;
-  has $.weight;
+  has Bool $.stroke;
+  has Str $.color;
+  has Numeric $.weight;
   has $.lineCap;
   has $.lineJoin;
   has $.dashArray;
