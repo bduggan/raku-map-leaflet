@@ -204,19 +204,24 @@ method create-marker(:@latlng, :%options) {
 
 multi method add-marker($lat where Numeric|Str, $lon where Numeric|Str, $popup-text?, *%options) {
   %options<popup-text> = $popup-text if $popup-text;
+  %options<icon> = self.create-div-icon: html => $_ with %options<div>:delete;
   self.create-marker(:latlng(+$lat, +$lon), :%options);
 }
 
 multi method add-marker(@latlng where *.elems == 2, $popup-text?, *%options) {
   %options<popup-text> = $popup-text if $popup-text;
+  %options<icon> = self.create-div-icon: html => $_ with %options<div>:delete;
   self.create-marker(:latlng(@latlng.map(+*)), :%options);
 }
 
 multi method add-marker(
   %coords where { $_<lat>:exists and $_<lon>:exists },
-  $popup-text?
+  $popup-text?,
+  *%options
 ) {
-  self.create-marker(:latlng(%coords<lat>, %coords<lon>), options => %( :$popup-text ) );
+  %options<popup-text> = $popup-text if $popup-text;
+  %options<icon> = self.create-div-icon: html => $_ with %options<div>:delete;
+  self.create-marker(:latlng(%coords<lat>, %coords<lon>), :%options);
 }
 
 method render {
@@ -433,12 +438,17 @@ the layers that have been added.  See C<ATTRIBUTES> for more options.
 
 =head2 add-marker
 
-    $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
-    $map.add-marker( 40.7128, -74.0060, "New York City");
+    $map.add-marker: { :lat(40.7128), :lon(-74.0060) }, "New York City";
+    $map.add-marker: 40.7128, -74.0060, "New York City";
+    $map.add-marker: [40.7128, -74.0060], div => "You are here";
 
 Add a marker.  The first argument is a hash with C<lat> and C<lon> keys, and the second argument
 is an optional popup text.  Or the first two arguments can be numeric for the lat + lon.
-See C<create-marker> below for a more flexible way to create markers.  Returns a C<Map::Leaflet::Marker> object.
+Or they can be an array of two numbers.  If a C<div> option is provided, it will be used as
+the C<html> option for a C<create-div-icon> call, and an C<icon> option will be added to the
+marker.
+
+See C<create-marker> below for a more complete way to create markers.  Returns a C<Map::Leaflet::Marker> object.
 
 =head2 create-div-icon
 

@@ -103,16 +103,18 @@ class Map::Leaflet::Polygon is Map::Leaflet::Path is export {
   }
 }
 
+subset CoordPair where Array && { .elems == 2 && .all ~~ Numeric && -90 ≤ .[0] ≤ 90 && -180 ≤ .[1] ≤ 180 && .[0].defined && .[1].defined}
+
 class Map::Leaflet::Polyline is Map::Leaflet::Path is export {
   also does LeafObject;
   has $.name = 'polyline_' ~ ++$i;
-  has @.latlngs;
+  has CoordPair @.latlngs;
   has Numeric $.smoothFactor;
   has Bool $.noClip;
 
   method render {
     my $latlngs = '['~
-      @.latlngs.map({ '['~.[0]~','~.[1]~']' }).join(',')
+      @.latlngs.map({ '['~ ( .[0] // die "missing coord" ) ~','~ ( .[1] // die "missing coord" ) ~']' }).join(',')
       ~ ']';
     my $opts-str = self.construct-option-string(exclude => set <latlngs>);
     my $js = qq:to/JS/;

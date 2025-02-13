@@ -1,0 +1,23 @@
+#!raku
+
+use Test;
+use Map::Leaflet 'leaf';
+
+plan 6;
+
+ok (leaf.add-marker: [ 40.7128, -74.0060 ], div => "New York City"), "New York City";
+ok (leaf.add-marker: 40.7589, -73.9851, div => "Empire State Building"), "Empire State Building";
+ok (leaf.add-marker: %(:lat(40.7267), :lon(-73.9815)), div => "Tompkins Square Park"), "Tompkins Square Park";
+
+my $html = leaf.render;
+
+# check markers
+like $html, /"New York City"/, "New York City marker";
+like $html, /"Empire State Building"/, "Empire State Building marker";
+like $html, /"Tompkins Square Park"/, "Tompkins Square Park marker";
+
+done-testing;
+
+
+
+
