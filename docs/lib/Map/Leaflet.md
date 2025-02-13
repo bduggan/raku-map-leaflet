@@ -133,10 +133,13 @@ Constructor. If no center is specified, then bounds are computed, and the starti
 add-marker
 ----------
 
-    $map.add-marker({ :lat(40.7128), :lon(-74.0060) }, "New York City");
-    $map.add-marker( 40.7128, -74.0060, "New York City");
+    $map.add-marker: { :lat(40.7128), :lon(-74.0060) }, "New York City";
+    $map.add-marker: 40.7128, -74.0060, "New York City";
+    $map.add-marker: [40.7128, -74.0060], div => "You are here";
 
-Add a marker. The first argument is a hash with `lat` and `lon` keys, and the second argument is an optional popup text. Or the first two arguments can be numeric for the lat + lon. See `create-marker` below for a more flexible way to create markers. Returns a `Map::Leaflet::Marker` object.
+Add a marker. The first argument is a hash with `lat` and `lon` keys, and the second argument is an optional popup text. Or the first two arguments can be numeric for the lat + lon. Or they can be an array of two numbers. If a `div` option is provided, it will be used as the `html` option for a `create-div-icon` call, and an `icon` option will be added to the marker.
+
+See `create-marker` below for a more complete way to create markers. Returns a `Map::Leaflet::Marker` object.
 
 create-div-icon
 ---------------
