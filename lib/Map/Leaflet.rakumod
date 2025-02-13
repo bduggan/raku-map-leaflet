@@ -32,7 +32,7 @@ method map-css {
       }
   CSS
 }
-has $.extra-css = q:to/CSS/;
+has $.extra-css is rw = q:to/CSS/;
    .mlraku-div-icon {
       background-color: yellow;
       border: 1px solid black;
