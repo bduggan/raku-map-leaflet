@@ -105,7 +105,7 @@ subtest 'Circle creation' => {
 
 # HTML rendering tests
 subtest 'HTML rendering' => {
-    plan 7;
+    plan 9;
     my $map = Map::Leaflet.new(
         title => 'Test Map',
         center => { :lat(40.7128), :lon(-74.0060) },
@@ -119,7 +119,10 @@ subtest 'HTML rendering' => {
     ok $html ~~ /'leaflet.css'/, 'Includes Leaflet CSS';
     ok $html ~~ /'<div id="map">'/, 'Contains map div';
     ok $html ~~ /'L.map'/, 'Initializes Leaflet map';
-    ok $html ~~ /'CartoDB.Positron'/, 'Uses default tile provider';
+    ok $html ~~ /'L.maplibreGL'/, 'Default uses maplibre for openfreemap';
+    ok $html.contains(Q"L.maplibreGL({ style: 'https://tiles.openfreemap.org/styles/positron' }).addTo(map);"),
+        'Default tile provider is openfreemap positron';
+    ok $html ~~ /'maplibre-gl'/, 'Includes maplibre-gl libraries for openfreemap';
 }
 
 # Map configuration tests

@@ -45,13 +45,20 @@ CSS
 has $.title = 'Map';
 has $.leaflet-version = '1.9.4';
 has $.leaflet-providers-version = '1.13.0';
+has $.maplibre-gl-version = '5.24.0';
+has $.maplibre-gl-leaflet-version = '0.1.4';
 
-# see https://leaflet-extras.github.io/leaflet-providers/preview/
-has $.tile-provider = 'CartoDB.Positron';
+# OpenFreeMap.* providers use maplibre-gl (vector tiles), everything else
+# is a leaflet-providers name.  See https://openfreemap.org/ and
+# https://leaflet-extras.github.io/leaflet-providers/preview/
+has $.tile-provider is rw = 'OpenFreeMap.Positron';
 
 has $.leaflet-css-url = 'https://unpkg.com/leaflet@' ~ $!leaflet-version ~ '/dist/leaflet.css';
 has $.leaflet-js-url = 'https://unpkg.com/leaflet@' ~ $!leaflet-version ~ '/dist/leaflet.js';
 has $.leaflet-providers-js-url = 'https://unpkg.com/leaflet-providers@' ~ $!leaflet-providers-version ~ '/leaflet-providers.js';
+has $.maplibre-gl-css-url = 'https://unpkg.com/maplibre-gl@' ~ $!maplibre-gl-version ~ '/dist/maplibre-gl.css';
+has $.maplibre-gl-js-url = 'https://unpkg.com/maplibre-gl@' ~ $!maplibre-gl-version ~ '/dist/maplibre-gl.js';
+has $.maplibre-gl-leaflet-js-url = 'https://unpkg.com/@maplibre/maplibre-gl-leaflet@' ~ $!maplibre-gl-leaflet-version ~ '/leaflet-maplibre-gl.js';
 
 has @.markers;
 has Map::Leaflet::Icon @.icons;
@@ -250,10 +257,27 @@ method render {
     }
 
     my $opts-str = self.construct-option-string(exclude =>
-        set <fit-bounds width height border output-path extra-css title leaflet-version leaflet-providers-version tile-provider leaflet-css-url leaflet-js-url leaflet-providers-js-url markers icons layers>);
+        set <fit-bounds width height border output-path extra-css title leaflet-version leaflet-providers-version maplibre-gl-version maplibre-gl-leaflet-version tile-provider leaflet-css-url leaflet-js-url leaflet-providers-js-url maplibre-gl-css-url maplibre-gl-js-url maplibre-gl-leaflet-js-url markers icons layers>);
 
     my $start-pos = $!fit-bounds ?? "map.fitBounds(bounds);"
     !! "map.setView({ $!center.render }, {$!zoom});";
+
+    my ($org,$style) = $!tile-provider.split('.');
+    my $openfreemap-style = $org eq 'OpenFreeMap' ?? $style.lc !! '';
+
+    my $tile-layer-js = $openfreemap-style
+      ?? Q:s"L.maplibreGL({ style: 'https://tiles.openfreemap.org/styles/$openfreemap-style' }).addTo(map);"
+      !! "L.tileLayer.provider('{$!tile-provider}').addTo(map);";
+
+    my $maplibre-head = $openfreemap-style ?? qq:to/HEAD/.indent(8) !! '';
+        <link rel="stylesheet" href="{$!maplibre-gl-css-url}" />
+        <script src="{$!maplibre-gl-js-url}"></script>
+        <script src="{$!maplibre-gl-leaflet-js-url}"></script>
+        HEAD
+
+    my $providers-head = $openfreemap-style ?? '' !! qq:to/HEAD/.indent(8);
+        <script src="{$!leaflet-providers-js-url}"></script>
+        HEAD
 
     qq:to/END/;
     <!DOCTYPE html>
@@ -262,8 +286,7 @@ method render {
         <title>{ $.title }</title>
         <link rel="stylesheet" href="{$!leaflet-css-url}" />
         <script src="{$!leaflet-js-url}"></script>
-        <script src="{$!leaflet-providers-js-url}"></script>
-        <style>
+$providers-head$maplibre-head        <style>
             { self.map-css }
             $!extra-css
         </style>
@@ -272,7 +295,7 @@ method render {
         <div id="map"></div>
         <script>
             var map = L.map('map', $opts-str );
-            L.tileLayer.provider('{$.tile-provider}').addTo(map);
+            $tile-layer-js
             L.control.scale().addTo(map);
             let bounds = L.latLngBounds();
 $layers-js
@@ -406,13 +429,22 @@ and provides a class for div-icons.
 
 =head2 tile-provider
 
-The tile provider to use.  Defaults to 'CartoDB.Positron'.  For a complete list of providers, see L<https://leaflet-extras.github.io/leaflet-providers/preview/>.
+The tile provider to use.  Defaults to 'OpenFreeMap.Positron'.
 
-Here are a few of the providers listed:  C<CartoDB.Positron>, C<OpenStreetMap.Mapnik>, C<Esri.WorldstreetMap>
+OpenFreeMap providers (C<OpenFreeMap.Positron>, C<OpenFreeMap.Liberty>, C<OpenFreeMap.Bright>) use
+free vector tiles from L<https://openfreemap.org/>, rendered with maplibre-gl via the
+L<https://github.com/maplibre/maplibre-gl-leaflet> plugin.
 
-=head2 leaflet-version, leaflet-providers-version
+Any other provider is looked up by name in leaflet-providers -- for a complete list,
+see L<https://leaflet-extras.github.io/leaflet-providers/preview/>.
 
-The version of leaflet.js and leaflet-providers.js to use.  Defaults to 1.9.4 and 1.13.0, respectively.
+Here are a few of the providers listed:  C<OpenFreeMap.Positron>, C<CartoDB.Positron>, C<OpenStreetMap.Mapnik>, C<Esri.WorldstreetMap>
+
+=head2 leaflet-version, leaflet-providers-version, maplibre-gl-version, maplibre-gl-leaflet-version
+
+The versions of leaflet.js, leaflet-providers.js, maplibre-gl and maplibre-gl-leaflet
+to use.  Defaults to 1.9.4, 1.13.0, 5.24.0 and 0.1.4, respectively.  The maplibre
+libraries are only included when an OpenFreeMap provider is selected.
 
 =head2 output-path
 

@@ -100,14 +100,18 @@ Extra CSS to include in the HTML. The default adds a border, centers the map, an
 tile-provider
 -------------
 
-The tile provider to use. Defaults to 'CartoDB.Positron'. For a complete list of providers, see [https://leaflet-extras.github.io/leaflet-providers/preview/](https://leaflet-extras.github.io/leaflet-providers/preview/).
+The tile provider to use. Defaults to 'OpenFreeMap.Positron'.
 
-Here are a few of the providers listed: `CartoDB.Positron`, `OpenStreetMap.Mapnik`, `Esri.WorldstreetMap`
+OpenFreeMap providers (`OpenFreeMap.Positron`, `OpenFreeMap.Liberty`, `OpenFreeMap.Bright`) use free vector tiles from [https://openfreemap.org/](https://openfreemap.org/), rendered with maplibre-gl via the [https://github.com/maplibre/maplibre-gl-leaflet](https://github.com/maplibre/maplibre-gl-leaflet) plugin.
 
-leaflet-version, leaflet-providers-version
-------------------------------------------
+Any other provider is looked up by name in leaflet-providers -- for a complete list, see [https://leaflet-extras.github.io/leaflet-providers/preview/](https://leaflet-extras.github.io/leaflet-providers/preview/).
 
-The version of leaflet.js and leaflet-providers.js to use. Defaults to 1.9.4 and 1.13.0, respectively.
+Here are a few of the providers listed: `OpenFreeMap.Positron`, `CartoDB.Positron`, `OpenStreetMap.Mapnik`, `Esri.WorldstreetMap`
+
+leaflet-version, leaflet-providers-version, maplibre-gl-version, maplibre-gl-leaflet-version
+--------------------------------------------------------------------------------------------
+
+The versions of leaflet.js, leaflet-providers.js, maplibre-gl and maplibre-gl-leaflet to use. Defaults to 1.9.4, 1.13.0, 5.24.0 and 0.1.4, respectively. The maplibre libraries are only included when an OpenFreeMap provider is selected.
 
 output-path
 -----------
